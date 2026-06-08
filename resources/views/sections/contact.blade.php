@@ -8,7 +8,7 @@
 
     <div class="contact-card rev vis">
 
-      <form id="contact-form" action="{{ route('contact.send') }}" method="POST" novalidate>
+      <form id="contact-form" novalidate>
         @csrf
 
         <div class="fg">
@@ -55,75 +55,87 @@
   </div>
 </section>
 
-@push('scripts')
 <script>
-(function () {
-  const form        = document.getElementById('contact-form');
-  const btn         = document.getElementById('contact-submit');
-  const btnText     = document.getElementById('contact-btn-text');
-  const fieldErrors = { name: 'en', email: 'ee', message: 'em' };
+document.addEventListener('DOMContentLoaded', function () {
+  var form    = document.getElementById('contact-form');
+  var btn     = document.getElementById('contact-submit');
+  var btnText = document.getElementById('contact-btn-text');
+
+  if (!form) return;
 
   function clearErrors() {
-    Object.values(fieldErrors).forEach(id => {
-      const el = document.getElementById(id);
-      el.textContent = '';
-      el.style.display = 'none';
+    ['en','ee','em'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) { el.textContent = ''; el.style.display = 'none'; }
     });
-    form.querySelectorAll('.fi, .ft').forEach(f => f.classList.remove('err'));
+    form.querySelectorAll('.err').forEach(function(f) { f.classList.remove('err'); });
   }
 
   function showFieldErrors(errors) {
-    Object.entries(errors).forEach(([field, messages]) => {
-      const errId = fieldErrors[field];
-      if (!errId) return;
-      const el = document.getElementById(errId);
-      el.textContent = messages[0];
-      el.style.display = 'block';
-      const input = form.querySelector(`[name="${field}"]`);
+    var map = { name: 'en', email: 'ee', message: 'em' };
+    Object.keys(errors).forEach(function(field) {
+      var elId = map[field];
+      if (!elId) return;
+      var el = document.getElementById(elId);
+      if (el) { el.textContent = errors[field][0]; el.style.display = 'block'; }
+      var input = form.querySelector('[name="' + field + '"]');
       if (input) input.classList.add('err');
     });
   }
 
-  function setLoading(loading) {
-    btn.disabled = loading;
-    btn.style.opacity = loading ? '0.7' : '1';
-    btn.style.cursor  = loading ? 'not-allowed' : '';
-    btnText.textContent = loading ? 'Sending…' : 'Send Message →';
+  function setLoading(on) {
+    btn.disabled = on;
+    btn.style.opacity = on ? '0.7' : '1';
+    btn.style.cursor  = on ? 'not-allowed' : '';
+    btnText.textContent = on ? 'Sending…' : 'Send Message →';
   }
 
-  form.addEventListener('submit', async function (e) {
+  form.addEventListener('submit', function(e) {
     e.preventDefault();
     clearErrors();
     setLoading(true);
 
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: new FormData(form),
+    var csrfToken = document.querySelector('meta[name="csrf-token"]');
+
+    fetch('{{ route("contact.send") }}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': csrfToken ? csrfToken.content : '',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({
+        name:    form.querySelector('[name="name"]').value,
+        email:   form.querySelector('[name="email"]').value,
+        message: form.querySelector('[name="message"]').value
+      })
+    })
+    .then(function(res) {
+      return res.json().then(function(data) {
+        return { status: res.status, data: data };
       });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        window.toast(data.message, 'ok');
-        form.reset();
-      } else if (res.status === 422 && data.errors) {
-        showFieldErrors(data.errors);
+    })
+    .then(function(result) {
+      if (result.status === 200) {
+        window.toast(result.data.message, 'ok');
+        form.querySelector('[name="name"]').value    = '';
+        form.querySelector('[name="email"]').value   = '';
+        form.querySelector('[name="message"]').value = '';
+      } else if (result.status === 422 && result.data.errors) {
+        showFieldErrors(result.data.errors);
         window.toast('Please fix the errors below.', 'err');
       } else {
-        window.toast(data.message || 'Something went wrong. Please try again.', 'err');
+        window.toast(result.data.message || 'Something went wrong. Please try again.', 'err');
       }
-    } catch (err) {
-      window.toast('Network error. Please check your connection and try again.', 'err');
-    } finally {
+    })
+    .catch(function(err) {
+      console.error('Contact fetch error:', err);
+      window.toast('Could not connect. Please email me directly at lusicarexceljay@gmail.com', 'err');
+    })
+    .finally(function() {
       setLoading(false);
-    }
+    });
   });
-})();
-</script>
-@endpush
+});
+</script> 
