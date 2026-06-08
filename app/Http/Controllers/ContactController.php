@@ -22,12 +22,10 @@ class ContactController extends Controller
                 ->cc('r.lusica.545469@umindanao.edu.ph')
                 ->send(new ContactMessage($validated));
 
-            return back()->with('success', 'Message sent! I\'ll get back to you soon.');
+            return response()->json(['status' => 'success', 'message' => 'Message sent! I\'ll get back to you soon.']);
         } catch (\Exception $e) {
             Log::error('Contact form mail failed: ' . $e->getMessage());
-            return back()
-                ->withInput()
-                ->with('error', 'Sorry, the message could not be sent. Please try again later or reach me directly at lusicarexceljay@gmail.com.');
+            return response()->json(['status' => 'error', 'message' => 'Sorry, the message could not be sent. Please try again later or reach me directly at lusicarexceljay@gmail.com.'], 500);
         }
     }
 }

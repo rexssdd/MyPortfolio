@@ -166,30 +166,11 @@ document.addEventListener('DOMContentLoaded', () => {
     stBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   }
 
-  /* ── Contact form submit state ── */
-  const contactForm = document.querySelector('form[action*="contact"]');
-  const contactBtn  = document.getElementById('contact-submit');
-  const contactBtnText = document.getElementById('contact-btn-text');
-  if (contactForm && contactBtn) {
-    contactForm.addEventListener('submit', () => {
-      contactBtn.disabled = true;
-      if (contactBtnText) contactBtnText.textContent = 'Sending…';
-      contactBtn.style.opacity = '0.7';
-      contactBtn.style.cursor = 'not-allowed';
-    });
-  }
 
-  /* ── Flash toast (from session) ── */
+  /* ── Flash toast (from session, non-contact pages) ── */
   const successAlert = document.querySelector('.alert-success');
-  if (successAlert) {
-    window.toast(successAlert.textContent.trim(), 'ok');
-    successAlert.style.display = 'none';
-  }
-
+  if (successAlert) { window.toast(successAlert.textContent.trim(), 'ok'); successAlert.style.display = 'none'; }
   const errorAlert = document.querySelector('.alert-error');
-  if (errorAlert) {
-    window.toast(errorAlert.textContent.trim(), 'err');
-    errorAlert.style.display = 'none';
-  }
+  if (errorAlert) { window.toast(errorAlert.textContent.trim(), 'err'); errorAlert.style.display = 'none'; }
 
 });

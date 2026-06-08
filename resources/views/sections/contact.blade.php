@@ -8,52 +8,31 @@
 
     <div class="contact-card rev vis">
 
-      {{-- Success message --}}
-      @if(session('success'))
-        <div class="alert-success" role="alert">{{ session('success') }}</div>
-      @elseif(session('error'))
-        <div class="alert-error" role="alert">{{ session('error') }}</div>
-      @endif
-
-      <form action="{{ route('contact.send') }}" method="POST" novalidate>
+      <form id="contact-form" action="{{ route('contact.send') }}" method="POST" novalidate>
         @csrf
 
         <div class="fg">
           <label for="cf-n">Your Name</label>
-          <input id="cf-n" name="name" class="fi {{ $errors->has('name') ? 'err' : '' }}"
+          <input id="cf-n" name="name" class="fi"
                  type="text" placeholder="John Doe" autocomplete="name"
-                 value="{{ old('name') }}"
-                 aria-required="true"
-                 aria-invalid="{{ $errors->has('name') ? 'true' : 'false' }}"
-                 aria-describedby="en" />
-          @error('name')
-            <div id="en" class="ferr" role="alert">{{ $message }}</div>
-          @enderror
+                 aria-required="true" />
+          <div id="en" class="ferr" role="alert" style="display:none;"></div>
         </div>
 
         <div class="fg">
           <label for="cf-e">Email Address</label>
-          <input id="cf-e" name="email" class="fi {{ $errors->has('email') ? 'err' : '' }}"
+          <input id="cf-e" name="email" class="fi"
                  type="email" placeholder="hello@example.com" autocomplete="email"
-                 value="{{ old('email') }}"
-                 aria-required="true"
-                 aria-invalid="{{ $errors->has('email') ? 'true' : 'false' }}"
-                 aria-describedby="ee" />
-          @error('email')
-            <div id="ee" class="ferr" role="alert">{{ $message }}</div>
-          @enderror
+                 aria-required="true" />
+          <div id="ee" class="ferr" role="alert" style="display:none;"></div>
         </div>
 
         <div class="fg">
           <label for="cf-m">Message</label>
-          <textarea id="cf-m" name="message" class="ft {{ $errors->has('message') ? 'err' : '' }}"
+          <textarea id="cf-m" name="message" class="ft"
                     placeholder="Tell me about your project or opportunity…"
-                    aria-required="true"
-                    aria-invalid="{{ $errors->has('message') ? 'true' : 'false' }}"
-                    aria-describedby="em">{{ old('message') }}</textarea>
-          @error('message')
-            <div id="em" class="ferr" role="alert">{{ $message }}</div>
-          @enderror
+                    aria-required="true"></textarea>
+          <div id="em" class="ferr" role="alert" style="display:none;"></div>
         </div>
 
         <button type="submit" class="btn btn-p" id="contact-submit"
@@ -75,3 +54,76 @@
     </div>
   </div>
 </section>
+
+@push('scripts')
+<script>
+(function () {
+  const form        = document.getElementById('contact-form');
+  const btn         = document.getElementById('contact-submit');
+  const btnText     = document.getElementById('contact-btn-text');
+  const fieldErrors = { name: 'en', email: 'ee', message: 'em' };
+
+  function clearErrors() {
+    Object.values(fieldErrors).forEach(id => {
+      const el = document.getElementById(id);
+      el.textContent = '';
+      el.style.display = 'none';
+    });
+    form.querySelectorAll('.fi, .ft').forEach(f => f.classList.remove('err'));
+  }
+
+  function showFieldErrors(errors) {
+    Object.entries(errors).forEach(([field, messages]) => {
+      const errId = fieldErrors[field];
+      if (!errId) return;
+      const el = document.getElementById(errId);
+      el.textContent = messages[0];
+      el.style.display = 'block';
+      const input = form.querySelector(`[name="${field}"]`);
+      if (input) input.classList.add('err');
+    });
+  }
+
+  function setLoading(loading) {
+    btn.disabled = loading;
+    btn.style.opacity = loading ? '0.7' : '1';
+    btn.style.cursor  = loading ? 'not-allowed' : '';
+    btnText.textContent = loading ? 'Sending…' : 'Send Message →';
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    clearErrors();
+    setLoading(true);
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: new FormData(form),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        window.toast(data.message, 'ok');
+        form.reset();
+      } else if (res.status === 422 && data.errors) {
+        showFieldErrors(data.errors);
+        window.toast('Please fix the errors below.', 'err');
+      } else {
+        window.toast(data.message || 'Something went wrong. Please try again.', 'err');
+      }
+    } catch (err) {
+      window.toast('Network error. Please check your connection and try again.', 'err');
+    } finally {
+      setLoading(false);
+    }
+  });
+})();
+</script>
+@endpush
