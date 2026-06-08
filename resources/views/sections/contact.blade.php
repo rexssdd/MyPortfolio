@@ -11,6 +11,8 @@
       {{-- Success message --}}
       @if(session('success'))
         <div class="alert-success" role="alert">{{ session('success') }}</div>
+      @elseif(session('error'))
+        <div class="alert-error" role="alert">{{ session('error') }}</div>
       @endif
 
       <form action="{{ route('contact.send') }}" method="POST" novalidate>
