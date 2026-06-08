@@ -17,5 +17,8 @@
         "zlib1g-dev",
         "libicu-dev",
         "libgd-dev"
-    ]
+    ],
+    "deploy": {
+        "startCommand": "php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"
+    }
 }
