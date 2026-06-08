@@ -1,6 +1,24 @@
 {
   "$schema": "https://schema.railpack.com",
   "packages": {
-    "php": "8.4"
+    "php": "8.4",
+    "node": "22"
+  },
+  "apt": {
+    "packages": [
+      "bison",
+      "re2c",
+      "libxml2-dev",
+      "libsqlite3-dev",
+      "libssl-dev",
+      "libcurl4-openssl-dev",
+      "libpng-dev",
+      "libjpeg-dev",
+      "libfreetype6-dev",
+      "libzip-dev",
+      "libonig-dev",
+      "libreadline-dev",
+      "libpq-dev"
+    ]
   }
 }
