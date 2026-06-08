@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Mail\ContactMessage;
 
 class ContactController extends Controller
@@ -16,10 +17,17 @@ class ContactController extends Controller
             'message' => 'required|string|min:10|max:2000',
         ]);
 
-        Mail::to('lusicarexceljay@gmail.com')
-            ->cc('r.lusica.545469@umindanao.edu.ph')
-            ->send(new ContactMessage($validated));
+        try {
+            Mail::to('lusicarexceljay@gmail.com')
+                ->cc('r.lusica.545469@umindanao.edu.ph')
+                ->send(new ContactMessage($validated));
 
-        return back()->with('success', 'Message sent! I\'ll get back to you soon.');
+            return back()->with('success', 'Message sent! I\'ll get back to you soon.');
+        } catch (\Exception $e) {
+            Log::error('Contact form mail failed: ' . $e->getMessage());
+            return back()
+                ->withInput()
+                ->with('error', 'Sorry, the message could not be sent. Please try again later or reach me directly at lusicarexceljay@gmail.com.');
+        }
     }
 }

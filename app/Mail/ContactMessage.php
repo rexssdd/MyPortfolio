@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -17,8 +18,14 @@ class ContactMessage extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            from: new Address(
+                config('mail.from.address'),
+                config('mail.from.name')
+            ),
             subject: "Portfolio Contact from {$this->data['name']}",
-            replyTo: [$this->data['email']],
+            replyTo: [
+                new Address($this->data['email'], $this->data['name']),
+            ],
         );
     }
 
