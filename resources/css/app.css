@@ -660,12 +660,15 @@ section {
 .proj-grid {
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:18px;
+  gap:20px;
 }
+
+/* ── Card shell ── */
 .proj-card {
   background:var(--g1); border:1px solid var(--b1);
-  border-radius:var(--r-lg); padding:22px;
-  transition:all .3s; position:relative; overflow:hidden;
+  border-radius:var(--r-lg); overflow:hidden;
+  transition:transform .3s, box-shadow .3s, border-color .3s;
+  position:relative; display:flex; flex-direction:column;
 }
 .proj-card::after {
   content:''; position:absolute;
@@ -674,34 +677,73 @@ section {
   transform:scaleX(0); transition:transform .3s; transform-origin:left;
 }
 .proj-card:hover {
-  background:var(--g2); border-color:rgba(37,99,235,.25);
-  transform:translateY(-4px);
+  transform:translateY(-5px);
+  box-shadow:0 16px 40px rgba(0,0,0,.35);
+  border-color:rgba(37,99,235,.3);
 }
 .proj-card:hover::after { transform:scaleX(1); }
-/* Collaborative project variant */
-.proj-card--collab {
-  border-color: rgba(16,185,129,.25);
+
+/* ── Collab variant ── */
+.proj-card--collab { border-color:rgba(16,185,129,.25); }
+.proj-card--collab::after { background:linear-gradient(90deg,var(--jade),#6366f1); }
+.proj-card--collab:hover { border-color:rgba(16,185,129,.45); }
+
+/* ── Image banner ── */
+.proj-img-wrap {
+  position:relative; width:100%; height:170px; overflow:hidden;
+  flex-shrink:0;
 }
-.proj-card--collab::after {
-  background: linear-gradient(90deg, var(--jade), #6366f1);
+.proj-img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .5s ease;
+  display:block;
 }
+.proj-card:hover .proj-img { transform:scale(1.07); }
+.proj-img-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,.05) 0%, rgba(0,0,0,.55) 100%);
+  pointer-events:none;
+}
+/* Project number badge over image */
+.proj-num-overlay {
+  position:absolute; top:10px; left:12px;
+  font-family:var(--font-mono); font-size:10px; font-weight:700;
+  color:rgba(255,255,255,.75);
+  background:rgba(0,0,0,.4); backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:var(--r-sm); padding:2px 7px;
+  letter-spacing:.5px;
+}
+/* Collab badge when over image */
 .proj-collab-badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.3);
-  border-radius: var(--r-sm); padding: 2px 8px;
-  font-size: 10px; font-family: var(--font-mono); color: var(--jade);
-  margin-bottom: 8px;
+  display:inline-flex; align-items:center; gap:4px;
+  background:rgba(16,185,129,.15); border:1px solid rgba(16,185,129,.35);
+  border-radius:var(--r-sm); padding:2px 8px;
+  font-size:10px; font-family:var(--font-mono); color:var(--jade);
+  margin-bottom:8px;
+}
+.proj-collab-badge--img {
+  position:absolute; bottom:10px; left:12px;
+  margin-bottom:0;
+  background:rgba(0,0,0,.5); backdrop-filter:blur(6px);
+  border-color:rgba(16,185,129,.5); color:#6ee7b7;
+}
+
+/* ── Card body ── */
+.proj-body {
+  padding:18px 20px 20px;
+  display:flex; flex-direction:column; flex:1;
 }
 .proj-num   { font-family:var(--font-mono); font-size:10px; color:var(--t3); margin-bottom:8px; }
 .proj-title { font-family:var(--font-display); font-size:15px; font-weight:700; margin-bottom:6px; line-height:1.3; }
-.proj-desc  { color:var(--t3); font-size:12px; line-height:1.75; margin-bottom:14px; }
+.proj-desc  { color:var(--t3); font-size:12px; line-height:1.75; margin-bottom:14px; flex:1; }
 .proj-techs { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:14px; }
 .proj-tech  {
   background:rgba(37,99,235,.1); border:1px solid rgba(37,99,235,.2);
   border-radius:var(--r-sm); padding:2px 8px;
   font-size:10px; font-family:var(--font-mono); color:var(--azure3);
 }
-.proj-links { display:flex; gap:7px; }
+.proj-links { display:flex; gap:7px; margin-top:auto; }
 .proj-link  {
   display:inline-flex; align-items:center; gap:5px;
   padding:6px 12px; border-radius:var(--r-sm); min-height:34px;

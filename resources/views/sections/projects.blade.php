@@ -30,32 +30,54 @@
                  data-filters="{{ $filterStr }}"
                  aria-label="Project: {{ $project['title'] }}">
 
-          {{-- Collab badge --}}
-          @if($isCollab)
-            <div class="proj-collab-badge" aria-label="Collaborative project">
-              🤝 {{ $project['collab_label'] }}
+          {{-- Project image banner --}}
+          @if(!empty($project['image']))
+            <div class="proj-img-wrap">
+              <img src="{{ $project['image'] }}"
+                   alt="{{ $project['image_alt'] ?? $project['title'] }}"
+                   class="proj-img"
+                   loading="lazy" />
+              <div class="proj-img-overlay"></div>
+              <span class="proj-num-overlay">{{ $project['number'] }}</span>
+              {{-- Collab badge floated over image --}}
+              @if($isCollab)
+                <div class="proj-collab-badge proj-collab-badge--img" aria-label="Collaborative project">
+                  🤝 {{ $project['collab_label'] }}
+                </div>
+              @endif
             </div>
+          @else
+            {{-- Fallback: no image —show old inline badge --}}
+            @if($isCollab)
+              <div class="proj-collab-badge" aria-label="Collaborative project">
+                🤝 {{ $project['collab_label'] }}
+              </div>
+            @endif
+            <div class="proj-num">Project {{ $project['number'] }}</div>
           @endif
 
-          <div class="proj-num">Project {{ $project['number'] }}</div>
-          <h3 class="proj-title">{{ $project['title'] }}</h3>
-          <p class="proj-desc">{{ $project['desc'] }}</p>
-          <ul class="proj-techs" aria-label="Technologies used">
-            @foreach($project['techs'] as $tech)
-              <li class="proj-tech">{{ $tech }}</li>
-            @endforeach
-          </ul>
-          <div class="proj-links">
-            <a href="{{ $project['github'] }}" target="_blank" rel="noopener noreferrer"
-               class="proj-link" aria-label="{{ $project['title'] }} GitHub repository">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
-                   width="16" height="16"
-                   style="vertical-align:middle;margin-right:6px;filter:invert(1);" alt="" />GitHub
-            </a>
-            <button class="proj-link demo-btn" aria-label="{{ $project['title'] }} live demo (coming soon)">
-              🚀 Demo
-            </button>
+          {{-- Card body --}}
+          <div class="proj-body">
+            <h3 class="proj-title">{{ $project['title'] }}</h3>
+            <p class="proj-desc">{{ $project['desc'] }}</p>
+            <ul class="proj-techs" aria-label="Technologies used">
+              @foreach($project['techs'] as $tech)
+                <li class="proj-tech">{{ $tech }}</li>
+              @endforeach
+            </ul>
+            <div class="proj-links">
+              <a href="{{ $project['github'] }}" target="_blank" rel="noopener noreferrer"
+                 class="proj-link" aria-label="{{ $project['title'] }} GitHub repository">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+                     width="16" height="16"
+                     style="vertical-align:middle;margin-right:6px;filter:invert(1);" alt="" />GitHub
+              </a>
+              <button class="proj-link demo-btn" aria-label="{{ $project['title'] }} live demo (coming soon)">
+                🚀 Demo
+              </button>
+            </div>
           </div>
+
         </article>
       @endforeach
     </div>
