@@ -19,10 +19,24 @@
 
     <div class="proj-grid" role="list" id="proj-grid" aria-live="polite" aria-label="Project list">
       @foreach($projects as $project)
-        <article class="proj-card"
+        @php
+          $isCollab  = $project['collab'] ?? false;
+          $filters   = $project['filters'];
+          if ($isCollab) { $filters[] = 'collab'; }
+          $filterStr = implode(',', $filters);
+        @endphp
+        <article class="proj-card {{ $isCollab ? 'proj-card--collab' : '' }}"
                  role="listitem"
-                 data-filters="{{ implode(',', $project['filters']) }}"
+                 data-filters="{{ $filterStr }}"
                  aria-label="Project: {{ $project['title'] }}">
+
+          {{-- Collab badge --}}
+          @if($isCollab)
+            <div class="proj-collab-badge" aria-label="Collaborative project">
+              🤝 {{ $project['collab_label'] }}
+            </div>
+          @endif
+
           <div class="proj-num">Project {{ $project['number'] }}</div>
           <h3 class="proj-title">{{ $project['title'] }}</h3>
           <p class="proj-desc">{{ $project['desc'] }}</p>
