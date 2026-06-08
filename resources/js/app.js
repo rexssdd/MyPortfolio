@@ -9,14 +9,11 @@ window.toast = function (msg, type = 'ok') {
   const el = document.getElementById('toast');
   if (!el) return;
   el.textContent = msg;
-  el.className = type;
-  el.style.opacity = '1';
-  el.style.transform = 'translateY(0)';
+  el.className = type + ' show';
   clearTimeout(window._toastTimer);
   window._toastTimer = setTimeout(() => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(12px)';
-  }, 3200);
+    el.classList.remove('show');
+  }, 4500);
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -169,10 +166,30 @@ document.addEventListener('DOMContentLoaded', () => {
     stBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   }
 
-  /* ── Flash success toast (from session) ── */
+  /* ── Contact form submit state ── */
+  const contactForm = document.querySelector('form[action*="contact"]');
+  const contactBtn  = document.getElementById('contact-submit');
+  const contactBtnText = document.getElementById('contact-btn-text');
+  if (contactForm && contactBtn) {
+    contactForm.addEventListener('submit', () => {
+      contactBtn.disabled = true;
+      if (contactBtnText) contactBtnText.textContent = 'Sending…';
+      contactBtn.style.opacity = '0.7';
+      contactBtn.style.cursor = 'not-allowed';
+    });
+  }
+
+  /* ── Flash toast (from session) ── */
   const successAlert = document.querySelector('.alert-success');
   if (successAlert) {
     window.toast(successAlert.textContent.trim(), 'ok');
+    successAlert.style.display = 'none';
+  }
+
+  const errorAlert = document.querySelector('.alert-error');
+  if (errorAlert) {
+    window.toast(errorAlert.textContent.trim(), 'err');
+    errorAlert.style.display = 'none';
   }
 
 });

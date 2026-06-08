@@ -56,9 +56,9 @@
           @enderror
         </div>
 
-        <button type="submit" class="btn btn-p"
+        <button type="submit" class="btn btn-p" id="contact-submit"
                 style="width:100%;justify-content:center;font-size:13px;">
-          Send Message →
+          <span id="contact-btn-text">Send Message →</span>
         </button>
       </form>
 
