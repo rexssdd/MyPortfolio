@@ -11,7 +11,7 @@
       {{-- Database badge --}}
       <article class="cert-card rev" data-reveal aria-label="Pearson IT Specialist Databases Certification">
         <div class="cert-badge-wrap">
-          <img src="{{ asset('images/ITS-Badges-Cybersecurity.png') }}"
+          <img src="{{ asset('images/ITS-Badges-Databases.png') }}"
                alt="Pearson IT Specialist Databases badge"
                width="110" height="110" />
         </div>
