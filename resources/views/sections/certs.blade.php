@@ -7,50 +7,67 @@
     </div>
 
     <div class="certs-grid">
+      
+    <!-- DATABASE -->
+    <article class="cert-card rev" data-reveal>
+        <div class="cert-showcase">
+            <img src="{{ asset('images/database.png') }}"
+                 alt="Database Certificate"
+                 class="cert-image">
 
-      {{-- Database badge --}}
-      <article class="cert-card rev" data-reveal aria-label="Pearson IT Specialist Databases Certification">
-        <div class="cert-badge-wrap">
-          <img src="{{ asset('images/database.png') }}"
-               alt="Pearson IT Specialist Databases badge"
-               width="110" height="110" />
+            <img src="{{ asset('images/ITS-Badges-Databases.png') }}"
+                 alt="Database Badge"
+                 class="cert-badge">
         </div>
-        <div class="cert-body">
-          <div class="cert-org">Certiport · Pearson</div>
-          <h3 class="cert-title">IT Specialist — Databases</h3>
-          <p class="cert-desc">
-            Proficiency in relational database management, SQL, data normalisation,
-            query writing, and data integrity — validated by Pearson and Certiport.
-          </p>
-          <a href="https://www.credly.com/users/rexcel-jay-lusica"
-             class="cert-btn" target="_blank" rel="noopener noreferrer"
-             aria-label="Verify Database certificate on Credly">
-            ✓ Verify on Credly
-          </a>
-        </div>
-      </article>
 
-      {{-- Cybersecurity badge --}}
-      <article class="cert-card rev" data-reveal aria-label="Pearson IT Specialist Cybersecurity Certification">
-        <div class="cert-badge-wrap">
-          <img src="{{ asset('images/cybersecurity.png') }}"
-               alt="Pearson IT Specialist Cybersecurity badge"
-               width="110" height="110" />
-        </div>
         <div class="cert-body">
-          <div class="cert-org">Certiport · Pearson</div>
-          <h3 class="cert-title">IT Specialist — Cybersecurity</h3>
-          <p class="cert-desc">
-            Core cybersecurity principles including network security, threat identification,
-            risk management, cryptography basics, and software security practices.
-          </p>
-          <a href="https://www.credly.com/users/rexcel-jay-lusica"
-             class="cert-btn" target="_blank" rel="noopener noreferrer"
-             aria-label="Verify Cybersecurity certificate on Credly">
-            ✓ Verify on Credly
-          </a>
+            <div class="cert-org">Certiport · Pearson</div>
+            <h3 class="cert-title">IT Specialist — Databases</h3>
+
+            <p class="cert-desc">
+                Certified in relational database management, SQL, normalization,
+                database design, data integrity, and query optimization.
+            </p>
+
+            <a href="https://www.credly.com/users/rexcel-jay-lusica"
+               class="cert-btn"
+               target="_blank"
+               rel="noopener noreferrer">
+                Verify on Credly
+            </a>
         </div>
-      </article>
+    </article>
+
+    <!-- CYBERSECURITY -->
+    <article class="cert-card rev" data-reveal>
+        <div class="cert-showcase">
+            <img src="{{ asset('images/cybersecurity.png') }}"
+                 alt="Cybersecurity Certificate"
+                 class="cert-image">
+
+            <img src="{{ asset('images/ITS-Badges-Cybersecurity.png') }}"
+                 alt="Cybersecurity Badge"
+                 class="cert-badge">
+        </div>
+
+        <div class="cert-body">
+            <div class="cert-org">Certiport · Pearson</div>
+            <h3 class="cert-title">IT Specialist — Cybersecurity</h3>
+
+            <p class="cert-desc">
+                Certified in cybersecurity fundamentals including network security,
+                threat detection, risk management, cryptography, and secure software practices.
+            </p>
+
+            <a href="https://www.credly.com/users/rexcel-jay-lusica"
+               class="cert-btn"
+               target="_blank"
+               rel="noopener noreferrer">
+                Verify on Credly
+            </a>
+        </div>
+    </article>
+
 
     </div>
   </div>
