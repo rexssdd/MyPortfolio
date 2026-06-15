@@ -984,16 +984,62 @@ section {
 .ghs-n { font-family:var(--font-display); font-size:17px; font-weight:800; color:var(--azure2); }
 .ghs-l { font-size:10px; color:var(--t3); font-family:var(--font-display); }
 
-.lang-grid {
+.lang-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  gap:16px;
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.lang-row{
+  background:var(--g1);
+  border:1px solid var(--b1);
+  border-radius:14px;
+  padding:14px;
+}
+
+.lang-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.lang-left{
+  display:flex;
+  align-items:center;
   gap:10px;
 }
-.lang-row   { display:flex; align-items:center; gap:9px; }
-.lang-dot   { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
-.lang-name  { font-family:var(--font-mono); font-size:11px; color:var(--t2); flex:1; }
-.lang-pct   { font-family:var(--font-mono); font-size:10px; color:var(--t3); }
 
+.lang-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+}
+
+.lang-name{
+  font-weight:600;
+}
+
+.lang-pct{
+  font-size:.9rem;
+  color:var(--azure3);
+}
+
+.lang-bar{
+  width:100%;
+  height:8px;
+  background:rgba(255,255,255,.08);
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.lang-fill{
+  height:100%;
+  border-radius:999px;
+  transition:width 1.2s ease;
+}
 /* ═══════════════════════════════════════════════════════
    CONTACT SECTION
    HCI: Clear label positioning, inline validation feedback,

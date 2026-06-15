@@ -26,15 +26,31 @@
       <div class="sec-tag">// language breakdown</div>
     </div>
 
-    <ul class="lang-grid rev vis" aria-label="Programming language usage">
-      @foreach($langs as $lang)
-        <li class="lang-row">
-          <div class="lang-dot" style="background:{{ $lang['color'] }}" aria-hidden="true"></div>
-          <span class="lang-name">{{ $lang['name'] }}</span>
-          <span class="lang-pct" aria-label="{{ $lang['percent'] }}%">{{ $lang['percent'] }}%</span>
-        </li>
-      @endforeach
-    </ul>
+        <ul class="lang-grid rev vis" aria-label="Programming language usage">
+        @foreach($langs as $lang)
+          <li class="lang-row">
+
+            <div class="lang-head">
+              <div class="lang-left">
+                <div class="lang-dot"
+                    style="background:{{ $lang['color'] }}"
+                    aria-hidden="true"></div>
+
+                <span class="lang-name">{{ $lang['name'] }}</span>
+              </div>
+
+              <span class="lang-pct">{{ $lang['percent'] }}%</span>
+            </div>
+
+            <div class="lang-bar">
+              <div class="lang-fill"
+                  style="width: {{ $lang['percent'] }}%; background: {{ $lang['color'] }}">
+              </div>
+            </div>
+
+          </li>
+        @endforeach
+      </ul>
 
     <div style="margin-top:22px;text-align:center;">
       <a href="https://github.com/rexssdd" target="_blank" rel="noopener noreferrer"
