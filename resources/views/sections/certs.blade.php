@@ -11,7 +11,7 @@
       {{-- Database badge --}}
       <article class="cert-card rev" data-reveal aria-label="Pearson IT Specialist Databases Certification">
         <div class="cert-badge-wrap">
-          <img src="{{ asset('images/ITS-Badges-Databases.png') }}"
+          <img src="{{ asset('images/database.png') }}"
                alt="Pearson IT Specialist Databases badge"
                width="110" height="110" />
         </div>
@@ -33,7 +33,7 @@
       {{-- Cybersecurity badge --}}
       <article class="cert-card rev" data-reveal aria-label="Pearson IT Specialist Cybersecurity Certification">
         <div class="cert-badge-wrap">
-          <img src="{{ asset('images/ITS-Badges-Cybersecurity.png') }}"
+          <img src="{{ asset('images/cybersecurity.png') }}"
                alt="Pearson IT Specialist Cybersecurity badge"
                width="110" height="110" />
         </div>
