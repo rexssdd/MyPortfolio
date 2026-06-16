@@ -15,6 +15,7 @@
       rock-solid backends. Passionate about clean code, database architecture,
       and cybersecurity.
     </p>
+    
     <nav class="hero-btns" aria-label="Quick actions">
       <a href="#projects" class="btn btn-p">⚡ View Projects</a>
       <a href="#contact"  class="btn btn-g">📩 Contact Me</a>
