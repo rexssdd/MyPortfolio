@@ -371,6 +371,16 @@ section {
 .btn-o:hover { background:var(--g3); transform:translateY(-2px); }
 .btn-sm { padding:8px 16px; font-size:11px; min-height:36px; }
 
+#resume-btn {
+  background:linear-gradient(135deg,#D97706,#F59E0B);
+  color:#fff;
+  border:none;
+}
+#resume-btn:hover {
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(217,119,6,.32);
+}
+
 /* ── Scroll-reveal ──────────────────────────────────── */
 .rev {
   opacity:0; transform:translateY(22px);
