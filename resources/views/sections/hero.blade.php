@@ -15,13 +15,11 @@
       rock-solid backends. Passionate about clean code, database architecture,
       and cybersecurity.
     </p>
-    
     <nav class="hero-btns" aria-label="Quick actions">
       <a href="#projects" class="btn btn-p">⚡ View Projects</a>
       <a href="#contact"  class="btn btn-g">📩 Contact Me</a>
       <a href="{{ asset('Resume/Rexcel_Jay_Lusica_Resume.pdf') }}" target="_blank" rel="noopener noreferrer" class="btn btn-o" id="resume-btn" aria-label="View resume (opens in new tab)">↓ View Resume</a>
     </nav>
-    
     <dl class="hero-stats" aria-label="Key statistics">
       @foreach([['6+','Projects'],['2','Certs'],['5+','Technologies'],['∞','Curiosity']] as [$num, $label])
         <div class="stat">
