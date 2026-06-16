@@ -147,11 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => window.toast('Live demo coming soon!', 'ok'));
   });
 
-  /* ── Resume button ── */
-  document.getElementById('resume-btn')?.addEventListener('click', () => {
-    window.toast('Resume download coming soon!', 'ok');
-  });
-
   /* ── LinkedIn button ── */
   document.getElementById('linkedin-btn')?.addEventListener('click', () => {
     window.toast('LinkedIn coming soon!', 'ok');

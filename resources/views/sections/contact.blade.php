@@ -50,6 +50,7 @@
         <button class="soc-btn" id="linkedin-btn">💼 LinkedIn</button>
         <a href="mailto:lusicarexceljay@gmail.com,r.lusica.545469@umindanao.edu.ph"
            class="soc-btn" aria-label="Send email">✉️ Email</a>
+        <a href="tel:+639067898243" class="soc-btn" aria-label="Call phone number">📞 0906 789 8243</a>
       </nav>
     </div>
   </div>
