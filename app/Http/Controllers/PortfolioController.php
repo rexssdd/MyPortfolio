@@ -15,11 +15,86 @@ class PortfolioController extends Controller
         $roles = $this->roles();
         $skillCategories = $this->skillCategories();
         $projectFilters = $this->projectFilters();
+        $certificates = $this->certificates();
 
         return view('portfolio', compact(
             'skills', 'projects', 'timeline', 'langs',
-            'roles', 'skillCategories', 'projectFilters'
+            'roles', 'skillCategories', 'projectFilters', 'certificates'
         ));
+    }
+
+    /**
+     * Automatically scans public/cert and builds a list of certificate
+     * files (PDF/image) to display on the portfolio. Drop a new file in
+     * that folder and it will show up here automatically — no code
+     * changes required.
+     */
+    private function certificates(): array
+    {
+        $dir = public_path('cert');
+
+        if (!is_dir($dir)) {
+            return [];
+        }
+
+        $allowedExt = ['pdf', 'png', 'jpg', 'jpeg', 'webp'];
+        $files = glob($dir . '/*');
+        $certificates = [];
+
+        foreach ($files as $path) {
+            if (!is_file($path)) {
+                continue;
+            }
+
+            $filename = basename($path);
+            $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+            if (!in_array($ext, $allowedExt, true)) {
+                continue;
+            }
+
+            $mtime = filemtime($path);
+
+            $certificates[] = [
+                'filename'  => $filename,
+                'title'     => $this->prettifyCertTitle($filename),
+                'url'       => asset('cert/' . rawurlencode($filename)),
+                'ext'       => $ext,
+                'is_pdf'    => $ext === 'pdf',
+                'size_kb'   => round(filesize($path) / 1024),
+                'modified'  => date('M Y', $mtime),
+                'mtime'     => $mtime,
+            ];
+        }
+
+        // Newest certificates first.
+        usort($certificates, fn ($a, $b) => $b['mtime'] <=> $a['mtime']);
+
+        return $certificates;
+    }
+
+    /**
+     * Turns a raw filename like "CCE_Certificate_Rexcel_Jay_Lusica.pdf"
+     * or "Cert36012358315.pdf" into a readable card title.
+     */
+    private function prettifyCertTitle(string $filename): string
+    {
+        $name = pathinfo($filename, PATHINFO_FILENAME);
+
+        // Replace separators with spaces.
+        $name = str_replace(['_', '-', '.'], ' ', $name);
+
+        // Drop long numeric IDs (e.g. "Cert36012358315" -> "Cert").
+        $name = preg_replace('/\d{4,}/', '', $name);
+
+        // Collapse repeated spaces.
+        $name = trim(preg_replace('/\s+/', ' ', $name));
+
+        if ($name === '' || strtolower($name) === 'cert') {
+            return 'Certificate';
+        }
+
+        return ucwords($name);
     }
 
     private function skills(): array
