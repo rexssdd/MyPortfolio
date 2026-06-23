@@ -150,7 +150,7 @@ class PortfolioController extends Controller
                 'desc'          => 'Laravel and Vite-powered inventory management platform for tracking stock levels, items, and warehouse operations, styled with Tailwind CSS. Developed in collaboration with cheezypotatoes.',
                 'techs'         => ['Laravel', 'MySQL', 'Tailwind'],
                 'filters'       => ['laravel', 'mysql', 'collab'],
-                'image'         => asset('projectDesigns/inventory.png'),
+                'image'         => asset('projectDesigns/Inventory.png'),
                 'image_alt'     => 'Warehouse shelves stocked with inventory boxes',
                 'github'        => 'https://github.com/cheezypotatoes/InventoryManagement',
                 'collab'        => true,
