@@ -1,26 +1,26 @@
 <section id="hero" aria-labelledby="hero-name">
   <div class="hero-left">
-    <div class="hero-badge" role="status">
+    <div class="hero-badge rev" data-reveal role="status">
       <span class="badge-blink" aria-hidden="true"></span>
       Available for opportunities
     </div>
-    <h1 class="hero-name" id="hero-name">
+    <h1 class="hero-name rev" data-reveal id="hero-name" style="transition-delay:.08s">
       Rexcel Jay<br><span class="grad">A. Lusica</span>
     </h1>
-    <div class="hero-role" id="typed-role" aria-live="polite" aria-atomic="true">
+    <div class="hero-role rev" data-reveal id="typed-role" style="transition-delay:.16s" aria-live="polite" aria-atomic="true">
       <span id="typed-text"></span><span class="cursor" aria-hidden="true"></span>
     </div>
-    <p class="hero-desc">
+    <p class="hero-desc rev" data-reveal style="transition-delay:.22s">
       Building elegant, scalable web systems — from pixel-perfect frontends to
       rock-solid backends. Passionate about clean code, database architecture,
       and cybersecurity.
     </p>
-    <div class="hero-btns" role="group" aria-label="Quick actions">
+    <div class="hero-btns rev" data-reveal role="group" aria-label="Quick actions" style="transition-delay:.3s">
       <a href="#projects" class="btn btn-p">⚡ View Projects</a>
       <a href="#contact"  class="btn btn-g">📩 Contact Me</a>
       <a href="{{ asset('Resume/Rexcel_Jay_Lusica_Resume.pdf') }}" target="_blank" rel="noopener noreferrer" class="btn btn-o" id="resume-btn" aria-label="View resume (opens in new tab)">↓ View Resume</a>
     </div>
-    <dl class="hero-stats" aria-label="Key statistics">
+    <dl class="hero-stats rev" data-reveal aria-label="Key statistics" style="transition-delay:.38s">
       @foreach([['7','Projects'],['2','Certs'],['5+','Technologies'],['∞','Curiosity']] as [$num, $label])
         <div class="stat">
           <dt class="stat-label">{{ $label }}</dt>
@@ -30,7 +30,7 @@
     </dl>
   </div>
 
-  <div class="hero-right" aria-label="Profile card">
+  <div class="hero-right rev-right" data-reveal aria-label="Profile card">
     <div class="profile-card">
       <img src="{{ asset('images/profilePicture.png') }}"
            alt="Rexcel Jay A. Lusica"

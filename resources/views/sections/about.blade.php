@@ -1,6 +1,6 @@
 <section id="about" aria-labelledby="about-title">
   <div class="sec-wrap">
-    <div class="sec-head rev" data-reveal>
+    <div class="sec-head rev-left" data-reveal>
       <div class="sec-tag">// who I am</div>
       <h2 class="sec-title" id="about-title">About <span class="g">Me</span></h2>
       <p style="color:var(--t2);font-size:14px;line-height:1.8;max-width:380px;margin-top:16px;">
@@ -24,7 +24,7 @@
       </ul>
     </div>
 
-    <div class="about-visual rev" data-reveal aria-label="Profile illustration">
+    <div class="about-visual rev-right" data-reveal aria-label="Profile illustration">
       <div class="about-avatar-lg">
         <img src="{{ asset('images/profilePicture.png') }}"
              alt="Rexcel Jay A. Lusica"

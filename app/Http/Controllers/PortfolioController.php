@@ -23,12 +23,6 @@ class PortfolioController extends Controller
         ));
     }
 
-    /**
-     * Automatically scans public/cert and builds a list of certificate
-     * files (PDF/image) to display on the portfolio. Drop a new file in
-     * that folder and it will show up here automatically — no code
-     * changes required.
-     */
     private function certificates(): array
     {
         $dir = public_path('cert');
