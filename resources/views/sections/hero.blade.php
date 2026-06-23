@@ -21,7 +21,7 @@
       <a href="{{ asset('Resume/Rexcel_Jay_Lusica_Resume.pdf') }}" target="_blank" rel="noopener noreferrer" class="btn btn-o" id="resume-btn" aria-label="View resume (opens in new tab)">↓ View Resume</a>
     </div>
     <dl class="hero-stats" aria-label="Key statistics">
-      @foreach([['6+','Projects'],['2','Certs'],['5+','Technologies'],['∞','Curiosity']] as [$num, $label])
+      @foreach([['9+','Projects'],['2','Certs'],['5+','Technologies'],['∞','Curiosity']] as [$num, $label])
         <div class="stat">
           <dt class="stat-label">{{ $label }}</dt>
           <dd class="stat-num">{{ $num }}</dd>

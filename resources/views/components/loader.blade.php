@@ -7,17 +7,11 @@
   <div class="loader-ring ring3" aria-hidden="true"><div class="ring-dot"></div></div>
 
   <div id="loader-avatar" aria-hidden="true">
-  <img
-    src="{{ asset('images/loadingProfile2.png') }}"
-    alt="Rexcel Jay A. Lusica"
-    style="
-      width: auto;
-      height: 700px;
-      display: block;
-      object-fit: contain;
-    "
-  />
-</div>
+    <img
+      src="{{ asset('images/loadingProfile2.png') }}"
+      alt="Rexcel Jay A. Lusica"
+    />
+  </div>
 
   <div id="loader-text">
     <div id="loader-name">Rexcel Jay A. Lusica</div>

@@ -158,6 +158,13 @@ body {
   overflow:visible; cursor:pointer;
   transition:transform .2s;
 }
+#loader-avatar img {
+  display:block;
+  width:auto;
+  height:clamp(140px, 30vh, 320px);
+  max-width:60vw;
+  object-fit:contain;
+}
 
 #loader-text {
   position:relative; z-index:2;

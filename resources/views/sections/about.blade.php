@@ -28,7 +28,7 @@
       <div class="about-avatar-lg">
         <img src="{{ asset('images/profilePicture.png') }}"
              alt="Rexcel Jay A. Lusica"
-             style="display:block;width:150px;height:150px;border-radius:50%;object-fit:cover;object-position:top;" />
+             style="display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:top;" />
       </div>
       <div class="fl-badge fl1" aria-hidden="true">
         <div class="fl-d" style="background:#2563EB"></div>Laravel Expert
