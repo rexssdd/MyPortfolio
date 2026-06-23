@@ -84,7 +84,6 @@
               @endif
             </div>
             <div class="cert-body">
-              <div class="cert-org">Auto-detected · public/cert</div>
               <h3 class="cert-title">{{ $cert['title'] }}</h3>
               <p class="cert-desc">
                 {{ strtoupper($cert['ext']) }} file · {{ $cert['size_kb'] }} KB
