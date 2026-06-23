@@ -135,7 +135,7 @@ class PortfolioController extends Controller
             ],
             [
                 'number'        => '02',
-                'title'         => 'Water Refilling Station POS',
+                'title'         => 'Water Refilling Station System',
                 'desc'          => 'Complete point-of-sale system for water refilling businesses with inventory tracking, sales reports, and customer management.',
                 'techs'         => ['Laravel', 'MySQL', 'Bootstrap'],
                 'filters'       => ['laravel', 'mysql'],
