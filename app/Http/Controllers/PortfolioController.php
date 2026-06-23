@@ -210,6 +210,17 @@ class PortfolioController extends Controller
                 'github'        => 'https://github.com/rexssdd/banana-plantation-simulation',
                 'collab'        => false,
             ],
+             [
+                'number'        => '09',
+                'title'         => 'Tasty Time',
+                'desc'          => 'PHP food-ordering web app with customer account creation, an order placement flow, order history, and a separate admin dashboard for managing orders.',
+                'techs'         => ['PHP', 'MySQL', 'JavaScript', 'CSS'],
+                'filters'       => ['mysql'],
+                'image'         => asset('projectDesigns/Tastytimee.webp'),
+                'image_alt'     => 'Plate of food ready for delivery',
+                'github'        => 'https://github.com/rexssdd/tastytime',
+                'collab'        => false,
+            ],
         ];
     }
 
