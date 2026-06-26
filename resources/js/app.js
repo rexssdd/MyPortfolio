@@ -330,10 +330,14 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => window.toast('Live demo coming soon!', 'ok'));
   });
 
-  /* ── LinkedIn button ── */
-  document.getElementById('linkedin-btn')?.addEventListener('click', () => {
-    window.toast('LinkedIn coming soon!', 'ok');
-  });
+/* ── LinkedIn button ── */
+document.getElementById('linkedin-btn')?.addEventListener('click', () => {
+  window.toast('Opening LinkedIn...', 'ok');
+
+  setTimeout(() => {
+    window.open('https://www.linkedin.com/in/rexcel-jay-lusica-7a898436b', '_blank');
+  }, 500);
+});
 
   /* ── Scroll to top ── */
   const stBtn = document.getElementById('st');
