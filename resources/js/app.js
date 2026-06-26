@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
   cursorGlow.style.cssText = `
     position: fixed; width: 400px; height: 400px;
     border-radius: 50%; pointer-events: none; z-index: 0;
-    background: radial-gradient(circle, rgba(29,92,229,.06) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255,107,74,.07) 0%, transparent 70%);
     transform: translate(-50%, -50%);
     transition: opacity .3s;
     will-change: left, top;

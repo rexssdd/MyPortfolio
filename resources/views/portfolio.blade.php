@@ -15,9 +15,6 @@
 
 @section('content')
 
-  {{-- Particle background canvas --}}
-  <canvas id="cv" aria-hidden="true"></canvas>
-
   {{-- ── HERO ── --}}
   @include('sections.hero')
   <div class="divider" aria-hidden="true"></div>
@@ -50,7 +47,3 @@
   @include('sections.contact')
 
 @endsection
-
-@push('scripts')
-  <script src="{{ asset('js/loader.js') }}"></script>
-@endpush

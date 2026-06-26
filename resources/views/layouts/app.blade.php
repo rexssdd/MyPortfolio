@@ -17,9 +17,6 @@
 </head>
 <body>
 
-  {{-- Loader --}}
-  @include('components.loader')
-
   {{-- Aurora ambient background --}}
   <div id="aurora-bg" aria-hidden="true">
     <div class="aurora-orb orb-a"></div>
