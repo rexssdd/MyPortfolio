@@ -10,6 +10,50 @@ window.toast = function (msg, type = 'ok') {
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* ── Matrix rain background ── */
+  (function initMatrixRain() {
+    const canvas = document.getElementById('matrix-bg');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ01';
+    const fontSize = 16;
+    let columns, drops;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      columns = Math.floor(canvas.width / fontSize);
+      drops = Array.from({ length: columns }, () => Math.random() * -50);
+    }
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    function draw() {
+      ctx.fillStyle = 'rgba(10,14,12,0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = fontSize + 'px monospace';
+      for (let i = 0; i < columns; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+        ctx.fillStyle = Math.random() > 0.96 ? '#bfffd6' : '#39FF6A';
+        ctx.fillText(text, x, y);
+        if (y > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduceMotion) {
+      setInterval(draw, 45);
+    } else {
+      ctx.fillStyle = '#0A0E0C';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  })();
+
   /* ── Aurora ambient background ── */
   const auroraOrbs = document.querySelectorAll('.aurora-orb');
   requestAnimationFrame(() => {

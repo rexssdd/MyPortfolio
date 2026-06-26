@@ -16,47 +16,47 @@ html {
 
 /* ── Design Tokens ─────────────────────────────────────── */
 :root {
-  /* Backgrounds — warm, airy editorial palette */
-  --ink:  #FAF6F0;
-  --ink2: #FFFFFF;
-  --ink3: #FBEEE2;
-  --surf: #FFFFFF;
+  /* Backgrounds — dark terminal palette */
+  --ink:  #0A0E0C;
+  --ink2: #0D1210;
+  --ink3: #10160F;
+  --surf: #11160F;
 
-  /* Brand — warm coral signature + supporting accents */
-  --coral:   #FF6B4A;
-  --coral2:  #FF8A65;
-  --coral3:  #FFD9CC;
-  --azure:   #2D5BFF;
-  --azure2:  #3B6CFF;
-  --azure3:  #3658CC;
+  /* Brand — matrix green signature + supporting accents */
+  --coral:   #39FF6A;
+  --coral2:  #6BFF94;
+  --coral3:  #1B3A24;
+  --azure:   #2DFF8A;
+  --azure2:  #4DFFA0;
+  --azure3:  #1FBF66;
   --jade:    #0F9D72;
   --jade2:   #16B883;
   --jade3:   #8DE6C4;
-  --violet:  #6D28D9;
-  --violet2: #8B5CF6;
-  --violet3: #D7C5FB;
-  --amber:   #B45309;
-  --amber2:  #F59E0B;
-  --rose:    #E11D48;
-  --rose2:   #FB7185;
+  --violet:  #1FBF66;
+  --violet2: #39FF6A;
+  --violet3: #1B3A24;
+  --amber:   #B8860B;
+  --amber2:  #E2B714;
+  --rose:    #FF4D6A;
+  --rose2:   #FF7B91;
 
-  /* Text — dark navy on light, refined contrast */
-  --t1: #181B22;
-  --t2: #5B6472;
-  --t3: #98A0AC;
+  /* Text — light green/grey on dark, terminal contrast */
+  --t1: #D6FFE2;
+  --t2: #8FB89C;
+  --t3: #4E6B58;
 
-  /* Card surfaces — clean tiered off-whites */
-  --g1: #FFFFFF;
-  --g2: #FFFCF8;
-  --g3: #F7F1EA;
-  /* Borders — soft dark-tinted hairlines */
-  --b1: rgba(24,27,34,0.07);
-  --b2: rgba(24,27,34,0.12);
-  --b3: rgba(24,27,34,0.20);
+  /* Card surfaces — tiered near-black greens */
+  --g1: #11170F;
+  --g2: #0D1310;
+  --g3: #161D14;
+  /* Borders — soft green-tinted hairlines */
+  --b1: rgba(57,255,106,0.10);
+  --b2: rgba(57,255,106,0.18);
+  --b3: rgba(57,255,106,0.30);
 
-  /* Typography */
-  --font-display: 'Syne', sans-serif;
-  --font-body:    'DM Sans', sans-serif;
+  /* Typography — monospace, terminal-driven */
+  --font-display: 'JetBrains Mono', monospace;
+  --font-body:    'JetBrains Mono', monospace;
   --font-mono:    'JetBrains Mono', monospace;
 
   /* Spacing scale */
@@ -82,10 +82,10 @@ html {
   /* HCI: Fitts' Law — minimum touch target */
   --tap-min: 44px;
 
-  /* Aurora glow colors — soft pastel blobs */
-  --aurora-a: rgba(255,138,101,.22);
-  --aurora-b: rgba(141,230,196,.20);
-  --aurora-c: rgba(139,156,255,.16);
+  /* Aurora glow colors — dim matrix-green blobs */
+  --aurora-a: rgba(57,255,106,.10);
+  --aurora-b: rgba(15,157,114,.10);
+  --aurora-c: rgba(57,255,106,.06);
 }
 
 /* ── Base ──────────────────────────────────────────────── */
@@ -130,6 +130,20 @@ html { scroll-padding-top: 80px; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ═══════════════════════════════════════════════════════
+   MATRIX RAIN BACKGROUND
+═══════════════════════════════════════════════════════ */
+#matrix-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.5;
+  background: var(--ink);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -203,7 +217,7 @@ nav {
   opacity: 1; pointer-events: all;
 }
 nav.scrolled {
-  background: rgba(250,246,240,.82);
+  background: rgba(10,14,12,.82);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-bottom: 1px solid var(--b1);
@@ -1040,7 +1054,7 @@ footer {
 #toast {
   position: fixed; bottom: 88px; left: 50%;
   transform: translateX(-50%) translateY(16px);
-  background: rgba(255,255,255,.92); backdrop-filter: blur(20px);
+  background: rgba(13,19,16,.92); backdrop-filter: blur(20px);
   border: 1px solid var(--b2); border-radius: var(--r-md);
   padding: 11px 24px; font-family: var(--font-display); font-size: 12px;
   font-weight: 600; z-index: 9000; opacity: 0;
@@ -1084,7 +1098,7 @@ section + section::before {
   .nav-links.open {
     display: flex; flex-direction: column;
     position: fixed; inset: 0;
-    background: rgba(250,246,240,.97); backdrop-filter: blur(28px);
+    background: rgba(10,14,12,.97); backdrop-filter: blur(28px);
     align-items: center; justify-content: center;
     gap: 20px; z-index: 650;
   }

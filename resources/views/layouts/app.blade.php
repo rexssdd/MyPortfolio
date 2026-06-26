@@ -17,6 +17,9 @@
 </head>
 <body>
 
+  {{-- Matrix rain background --}}
+  <canvas id="matrix-bg" aria-hidden="true"></canvas>
+
   {{-- Aurora ambient background --}}
   <div id="aurora-bg" aria-hidden="true">
     <div class="aurora-orb orb-a"></div>
