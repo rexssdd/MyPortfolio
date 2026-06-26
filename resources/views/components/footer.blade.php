@@ -5,6 +5,6 @@
     @endforeach
   </nav>
   <p class="foot-copy">
-    · © {{ date('Y') }} <span>Rexcel Jay A. Lusica</span>
+     · © {{ date('Y') }} <span>Rexcel Jay A. Lusica</span> a· 
   </p>
 </footer>

@@ -55,29 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   })();
 
-  /* ── Scroll morph reveal (PowerPoint-morph-style entrances) ── */
-  (function initMorphReveal() {
-    const targets = document.querySelectorAll(
-      'section .sec-head, section h2, .cert-card, .gh-card, .tl-item, .lang-row, .skill-card, .stat, .contact-card, .hero-left, .hero-right'
-    );
-    targets.forEach((el, i) => {
-      if (!el.hasAttribute('data-morph')) {
-        el.setAttribute('data-morph', i % 2 === 0 ? 'left' : 'right');
-      }
-    });
-
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
-
-    document.querySelectorAll('[data-morph]').forEach(el => io.observe(el));
-  })();
-
   /* ── Matrix rain background ── */
   (function initMatrixRain() {
     const canvas = document.getElementById('matrix-bg');
