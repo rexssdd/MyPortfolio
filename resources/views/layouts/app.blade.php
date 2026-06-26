@@ -17,6 +17,10 @@
 </head>
 <body>
 
+  {{-- Custom cursor --}}
+  <div id="cur-dot" aria-hidden="true"></div>
+  <div id="cur-ring" aria-hidden="true"></div>
+
   {{-- Matrix rain background --}}
   <canvas id="matrix-bg" aria-hidden="true"></canvas>
 

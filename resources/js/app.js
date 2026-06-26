@@ -10,6 +10,74 @@ window.toast = function (msg, type = 'ok') {
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* ── Custom cursor: dot + lagging ring, magnetic on hover ── */
+  (function initCursor() {
+    const dot = document.getElementById('cur-dot');
+    const ring = document.getElementById('cur-ring');
+    if (!dot || !ring) return;
+    const isCoarse = window.matchMedia('(hover: none), (max-width: 900px)').matches;
+    if (isCoarse) return;
+
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let rx = mx, ry = my;
+
+    window.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+    });
+
+    function loop() {
+      rx += (mx - rx) * 0.18;
+      ry += (my - ry) * 0.18;
+      ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    document.addEventListener('mousedown', () => ring.classList.add('click'));
+    document.addEventListener('mouseup', () => ring.classList.remove('click'));
+
+    const hoverables = 'a, button, .btn, .soc-btn, .hamburger, input, textarea, [role="button"]';
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest(hoverables)) ring.classList.add('hover');
+    });
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest(hoverables)) ring.classList.remove('hover');
+    });
+
+    document.addEventListener('mouseleave', () => {
+      dot.style.opacity = '0';
+      ring.style.opacity = '0';
+    });
+    document.addEventListener('mouseenter', () => {
+      dot.style.opacity = '1';
+      ring.style.opacity = '1';
+    });
+  })();
+
+  /* ── Scroll morph reveal (PowerPoint-morph-style entrances) ── */
+  (function initMorphReveal() {
+    const targets = document.querySelectorAll(
+      'section .sec-head, section h2, .cert-card, .gh-card, .tl-item, .lang-row, .skill-card, .stat, .contact-card, .hero-left, .hero-right'
+    );
+    targets.forEach((el, i) => {
+      if (!el.hasAttribute('data-morph')) {
+        el.setAttribute('data-morph', i % 2 === 0 ? 'left' : 'right');
+      }
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('[data-morph]').forEach(el => io.observe(el));
+  })();
+
   /* ── Matrix rain background ── */
   (function initMatrixRain() {
     const canvas = document.getElementById('matrix-bg');
