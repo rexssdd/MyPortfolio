@@ -284,6 +284,30 @@ section {
 }
 .sec-wrap { max-width: 1100px; margin: 0 auto; }
 
+/* ── Per-section morph transition (on scroll-into-view) ──
+   Each section starts slightly scaled/clipped/tilted and "morphs"
+   into its resting shape as it enters the viewport. Toggled via
+   IntersectionObserver (see app.js `initSectionMorph`). */
+section[id] {
+  clip-path: inset(6% 3% round 28px);
+  transform: scale(.94) translateY(36px);
+  opacity: 0;
+  transition:
+    clip-path 1s var(--ease-out),
+    transform 1s var(--ease-out),
+    opacity .9s var(--ease-out);
+  will-change: clip-path, transform, opacity;
+}
+section[id].morphed {
+  clip-path: inset(0% 0% round 0px);
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+#hero[id] { clip-path: inset(0); transform: none; opacity: 1; } /* hero is visible immediately on load */
+@media (prefers-reduced-motion: reduce) {
+  section[id] { clip-path: none; transform: none; opacity: 1; transition: none; }
+}
+
 .sec-head { text-align: center; margin-bottom: 56px; }
 .sec-tag {
   display: inline-block; font-family: var(--font-mono);
@@ -969,6 +993,55 @@ img[src*="github-original"] { filter: invert(0) !important; opacity: .82; }
 .lang-fill { height: 100%; border-radius: 999px; transition: width 1.3s var(--ease-out); }
 
 /* ═══════════════════════════════════════════════════════
+   PLAYGROUND TABS
+═══════════════════════════════════════════════════════ */
+.pg-tabs {
+  display: flex; gap: 8px; justify-content: center;
+  margin-bottom: 24px; flex-wrap: wrap;
+}
+.pg-tab {
+  padding: 10px 20px; border-radius: var(--r-pill);
+  font-family: var(--font-display); font-size: 12px; font-weight: 700;
+  background: var(--g2); border: 1px solid var(--b2); color: var(--t2);
+  cursor: pointer; transition: all .22s; min-height: var(--tap-min);
+}
+.pg-tab:hover { color: var(--t1); background: var(--g3); }
+.pg-tab.on {
+  background: linear-gradient(135deg, var(--coral), var(--violet));
+  color: #07140c; border-color: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════
+   DINO RUN — canvas runner game
+═══════════════════════════════════════════════════════ */
+.dino-card {
+  background: var(--g1); border: 1px solid var(--b1);
+  border-radius: var(--r-xl); padding: 32px;
+  max-width: 760px; margin: 0 auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,.12);
+}
+.dino-stats {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+  margin-bottom: 20px; max-width: 280px; margin-inline: auto;
+}
+.dino-wrap {
+  position: relative; width: 100%; border-radius: var(--r-md);
+  overflow: hidden; border: 1px solid var(--b2); background: var(--ink2);
+}
+#dino-canvas { display: block; width: 100%; height: auto; touch-action: manipulation; cursor: pointer; }
+.dino-overlay {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(10,14,12,.55); color: var(--t1);
+  font-family: var(--font-display); font-size: 13px; text-align: center; padding: 16px;
+  transition: opacity .25s ease;
+}
+.dino-overlay.hide { opacity: 0; pointer-events: none; }
+.dino-overlay kbd {
+  background: var(--g3); border: 1px solid var(--b2); border-radius: 4px;
+  padding: 2px 6px; font-family: var(--font-mono); font-size: 11px;
+}
+
+/* ═══════════════════════════════════════════════════════
    CODE SPRINT — typing speed game
 ═══════════════════════════════════════════════════════ */
 .sprint-card {
@@ -1062,19 +1135,6 @@ label   {
 .ft   { min-height: 120px; }
 ::placeholder { color: var(--t3); opacity: 1; }
 
-.socials {
-  display: flex; gap: 10px; margin-top: 26px;
-  justify-content: center; flex-wrap: wrap;
-}
-.soc-btn {
-  display: flex; align-items: center; gap: 7px;
-  padding: 10px 18px; border-radius: var(--r-md); min-height: var(--tap-min);
-  font-size: 11px; font-family: var(--font-display); font-weight: 700;
-  text-decoration: none; background: var(--g2); border: 1px solid var(--b2);
-  color: var(--t2); transition: all .22s; cursor: pointer;
-}
-.soc-btn:hover { color: var(--t1); background: var(--g3); transform: translateY(-2px); border-color: var(--b3); }
-
 /* Direct contact info cards — LinkedIn, GitHub, phone, email */
 .contact-info {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
@@ -1112,21 +1172,11 @@ label   {
    FOOTER
 ═══════════════════════════════════════════════════════ */
 footer {
-  text-align: center; padding: 40px var(--sp-xl);
+  text-align: center; padding: 32px var(--sp-xl);
   border-top: 1px solid var(--b1);
   position: relative; z-index: 1;
   background: var(--ink);
 }
-.foot-links {
-  display: flex; gap: 20px; justify-content: center;
-  margin-bottom: 16px; flex-wrap: wrap;
-}
-.foot-links a {
-  color: var(--t3); text-decoration: none;
-  font-size: 12px; font-family: var(--font-display);
-  transition: color .2s; padding: 4px;
-}
-.foot-links a:hover { color: var(--coral); }
 .foot-copy { color: var(--t3); font-size: 11px; font-family: var(--font-mono); }
 .foot-copy span { color: var(--coral); }
 

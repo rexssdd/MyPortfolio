@@ -26,7 +26,7 @@
                  data-category="{{ $skill['category'] }}"
                  aria-label="{{ $skill['name'] }}: {{ $skill['level'] }}% proficiency">
           <div class="sk-ico" aria-hidden="true">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{ $skill['icon'] }}"
+            <img loading="lazy" decoding="async" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{ $skill['icon'] }}"
                  alt="{{ $skill['name'] }}"
                  width="36" height="36"
                  style="object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.4));"

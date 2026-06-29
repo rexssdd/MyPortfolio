@@ -83,12 +83,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let rainTimer = null;
+    function startRain() {
+      if (rainTimer || reduceMotion) return;
+      rainTimer = setInterval(draw, 60);
+    }
+    function stopRain() {
+      clearInterval(rainTimer);
+      rainTimer = null;
+    }
     if (!reduceMotion) {
-      setInterval(draw, 45);
+      startRain();
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopRain();
+        else startRain();
+      });
     } else {
       ctx.fillStyle = '#0A0E0C';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
+  })();
+
+  /* ── Per-section morph transition ──
+     Each <section id="…"> "morphs" into place (clip-path + scale)
+     as it scrolls into view. Lightweight, single observer for the
+     whole page — doesn't fight with the .rev reveal system. */
+  (function initSectionMorph() {
+    const sections = document.querySelectorAll('section[id]');
+    if (!sections.length) return;
+    const morphObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('morphed');
+          morphObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    sections.forEach((sec) => {
+      if (sec.id === 'hero') { sec.classList.add('morphed'); return; }
+      morphObs.observe(sec);
+    });
   })();
 
   /* ── Aurora ambient background ── */
@@ -457,15 +491,6 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => window.toast('Live demo coming soon!', 'ok'));
   });
 
-/* ── LinkedIn button ── */
-document.getElementById('linkedin-btn')?.addEventListener('click', () => {
-  window.toast('Opening LinkedIn...', 'ok');
-
-  setTimeout(() => {
-    window.open('https://www.linkedin.com/in/rexcel-jay-lusica-7a898436b', '_blank');
-  }, 500);
-});
-
   /* ── Scroll to top ── */
   const stBtn = document.getElementById('st');
   if (stBtn) {
@@ -641,6 +666,197 @@ document.getElementById('linkedin-btn')?.addEventListener('click', () => {
     restartBtn?.addEventListener('click', reset);
 
     reset();
+  })();
+
+  /* ── Playground tab switcher (Code Sprint ↔ Dino Run) ── */
+  (function initPlaygroundTabs() {
+    const tabSprint = document.getElementById('pg-tab-sprint');
+    const tabDino   = document.getElementById('pg-tab-dino');
+    const panelSprint = document.getElementById('pg-panel-sprint');
+    const panelDino   = document.getElementById('pg-panel-dino');
+    if (!tabSprint || !tabDino || !panelSprint || !panelDino) return;
+
+    function show(which) {
+      const sprintOn = which === 'sprint';
+      tabSprint.classList.toggle('on', sprintOn);
+      tabDino.classList.toggle('on', !sprintOn);
+      tabSprint.setAttribute('aria-selected', sprintOn ? 'true' : 'false');
+      tabDino.setAttribute('aria-selected', !sprintOn ? 'true' : 'false');
+      panelSprint.hidden = !sprintOn;
+      panelDino.hidden = sprintOn;
+      if (!sprintOn) window.dispatchEvent(new Event('dino:shown'));
+    }
+    tabSprint.addEventListener('click', () => show('sprint'));
+    tabDino.addEventListener('click', () => show('dino'));
+  })();
+
+  /* ── Dino Run: Chrome-dino-style canvas runner ──
+     Vanilla canvas game: tap/click/Space/ArrowUp to jump over
+     incoming cacti. Score climbs with distance; speed ramps up
+     over time. Best score persisted in localStorage. */
+  (function initDinoRun() {
+    const canvas = document.getElementById('dino-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const overlay = document.getElementById('dino-overlay');
+    const overlayText = document.getElementById('dino-overlay-text');
+    const scoreEl = document.getElementById('dino-score');
+    const bestEl  = document.getElementById('dino-best');
+    const restartBtn = document.getElementById('dino-restart');
+    const BEST_KEY = 'dinoRunBest';
+
+    const W = canvas.width, H = canvas.height;
+    const groundY = H - 30;
+    const GRAVITY = 0.9;
+    const JUMP_V  = -13.5;
+
+    let dino, obstacles, speed, score, best, running, rafId, spawnTimer;
+
+    function loadBest() {
+      best = parseInt(localStorage.getItem(BEST_KEY) || '0', 10);
+      bestEl.textContent = best;
+    }
+
+    function resetState() {
+      dino = { x: 50, y: groundY - 34, w: 30, h: 34, vy: 0, onGround: true };
+      obstacles = [];
+      speed = 5.2;
+      score = 0;
+      spawnTimer = 0;
+      running = false;
+      scoreEl.textContent = '0';
+      draw(); // paint initial frame
+    }
+
+    function jump() {
+      if (!running) { start(); return; }
+      if (dino.onGround) {
+        dino.vy = JUMP_V;
+        dino.onGround = false;
+      }
+    }
+
+    function start() {
+      resetState();
+      running = true;
+      overlay.classList.add('hide');
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(loop);
+    }
+
+    function gameOver() {
+      running = false;
+      cancelAnimationFrame(rafId);
+      if (score > best) {
+        best = score;
+        localStorage.setItem(BEST_KEY, String(best));
+        bestEl.textContent = best;
+        overlayText.innerHTML = `🦖 New best — ${score}! Tap or press Space to retry.`;
+      } else {
+        overlayText.innerHTML = `Game over — score ${score}. Tap or press Space to retry.`;
+      }
+      overlay.classList.remove('hide');
+    }
+
+    function spawnObstacle() {
+      const h = 24 + Math.random() * 22;
+      obstacles.push({ x: W + 10, y: groundY - h, w: 16 + Math.random() * 10, h });
+    }
+
+    function update() {
+      // Dino physics
+      dino.vy += GRAVITY;
+      dino.y += dino.vy;
+      if (dino.y >= groundY - dino.h) {
+        dino.y = groundY - dino.h;
+        dino.vy = 0;
+        dino.onGround = true;
+      }
+
+      // Obstacles
+      spawnTimer -= 1;
+      if (spawnTimer <= 0) {
+        spawnObstacle();
+        spawnTimer = Math.max(35, 70 - speed * 3) + Math.random() * 40;
+      }
+      obstacles.forEach(o => o.x -= speed);
+      obstacles = obstacles.filter(o => o.x + o.w > -10);
+
+      // Collision (slightly forgiving hitbox)
+      for (const o of obstacles) {
+        const pad = 6;
+        if (
+          dino.x + pad < o.x + o.w && dino.x + dino.w - pad > o.x &&
+          dino.y + pad < o.y + o.h && dino.y + dino.h - pad > o.y
+        ) {
+          gameOver();
+          return;
+        }
+      }
+
+      // Score & difficulty ramp
+      score += 1;
+      if (score % 90 === 0) speed = Math.min(speed + 0.4, 13);
+      scoreEl.textContent = Math.floor(score / 5);
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Ground
+      ctx.strokeStyle = '#1B3A24';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, groundY + 2);
+      ctx.lineTo(W, groundY + 2);
+      ctx.stroke();
+
+      // Dino
+      ctx.fillStyle = '#39FF6A';
+      ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
+      ctx.fillStyle = '#0A0E0C';
+      ctx.fillRect(dino.x + dino.w - 10, dino.y + 6, 4, 4); // eye
+
+      // Obstacles
+      ctx.fillStyle = '#1FBF66';
+      obstacles.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
+
+      // Score (top-right, in-canvas)
+      ctx.fillStyle = '#8FB89C';
+      ctx.font = '12px monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText(String(Math.floor(score / 5)).padStart(5, '0'), W - 10, 20);
+    }
+
+    function loop() {
+      if (!running) return;
+      update();
+      draw();
+      rafId = requestAnimationFrame(loop);
+    }
+
+    // Input
+    canvas.addEventListener('click', jump);
+    overlay.addEventListener('click', jump);
+    document.addEventListener('keydown', (e) => {
+      if ((e.code === 'Space' || e.code === 'ArrowUp') && panelVisible()) {
+        e.preventDefault();
+        jump();
+      }
+    });
+    restartBtn?.addEventListener('click', start);
+
+    function panelVisible() {
+      const panel = document.getElementById('pg-panel-dino');
+      return panel && !panel.hidden;
+    }
+
+    window.addEventListener('dino:shown', () => {
+      if (!dino) resetState();
+    });
+
+    loadBest();
+    resetState();
   })();
 
 });

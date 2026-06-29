@@ -11,11 +11,11 @@
     <!-- DATABASE -->
     <article class="cert-card rev" data-reveal>
         <div class="cert-showcase">
-            <img src="{{ asset('images/database.png') }}"
+            <img loading="lazy" decoding="async" src="{{ asset('images/database.png') }}"
                  alt="Database Certificate"
                  class="cert-image">
 
-            <img src="{{ asset('images/ITS-Badges-Databases.png') }}"
+            <img loading="lazy" decoding="async" src="{{ asset('images/ITS-Badges-Databases.png') }}"
                  alt="Database Badge"
                  class="cert-badge">
         </div>
@@ -41,11 +41,11 @@
     <!-- CYBERSECURITY -->
     <article class="cert-card rev" data-reveal>
         <div class="cert-showcase">
-            <img src="{{ asset('images/cybersecurity.png') }}"
+            <img loading="lazy" decoding="async" src="{{ asset('images/cybersecurity.png') }}"
                  alt="Cybersecurity Certificate"
                  class="cert-image">
 
-            <img src="{{ asset('images/ITS-Badges-Cybersecurity.png') }}"
+            <img loading="lazy" decoding="async" src="{{ asset('images/ITS-Badges-Cybersecurity.png') }}"
                  alt="Cybersecurity Badge"
                  class="cert-badge">
         </div>

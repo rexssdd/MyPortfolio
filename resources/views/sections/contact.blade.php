@@ -70,19 +70,6 @@
                 style="width:100%;justify-content:center;font-size:13px;">
           <span id="contact-btn-text">Send Message →</span>
         </button>
-      </form>
-
-      <nav class="socials" aria-label="Social links">
-        <a href="https://github.com/rexssdd" class="soc-btn"
-           target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in new tab)">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
-               width="16" height="16" style="vertical-align:middle;margin-right:6px;filter:invert(1);" alt="" />GitHub
-        </a>
-        <button class="soc-btn" id="linkedin-btn">💼 LinkedIn</button>
-        <a href="mailto:lusicarexceljay@gmail.com,r.lusica.545469@umindanao.edu.ph"
-           class="soc-btn" aria-label="Send email">✉️ Email</a>
-        <a href="tel:+639067898243" class="soc-btn" aria-label="Call phone number">📞 0906 789 8243</a>
-      </nav>
     </div>
   </div>
 </section>

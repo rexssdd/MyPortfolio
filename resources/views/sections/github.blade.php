@@ -7,7 +7,7 @@
 
     <div class="gh-card rev vis">
       <div class="gh-av-wrap" aria-label="GitHub avatar">
-  <img src="{{ asset('images/profilePicture.png') }}"
+  <img loading="lazy" decoding="async" src="{{ asset('images/profilePicture.png') }}"
        alt="rexssdd"
        style="width:70px;height:70px;border-radius:50%;object-fit:cover;object-position:top;" />
 </div>
@@ -55,7 +55,7 @@
     <div style="margin-top:22px;text-align:center;">
       <a href="https://github.com/rexssdd" target="_blank" rel="noopener noreferrer"
          class="btn btn-o" aria-label="Visit GitHub profile (opens in new tab)">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+        <img loading="lazy" decoding="async" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
              width="16" height="16"
              style="vertical-align:middle;margin-right:6px;filter:invert(1);" alt="" />
         GitHub Profile

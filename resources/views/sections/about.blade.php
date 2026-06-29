@@ -26,7 +26,7 @@
 
     <div class="about-visual rev-right" data-reveal aria-label="Profile illustration">
       <div class="about-avatar-lg">
-        <img src="{{ asset('images/profilePicture.png') }}"
+        <img loading="lazy" decoding="async" src="{{ asset('images/profilePicture.png') }}"
              alt="Rexcel Jay A. Lusica"
              style="display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:top;" />
       </div>
