@@ -718,7 +718,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function resetState() {
-      dino = { x: 50, y: groundY - 34, w: 30, h: 34, vy: 0, onGround: true };
+      dino = { x: 50, y: groundY - 34, w: 30, h: 34, vy: 0, onGround: true, frame: 0, frameTimer: 0 };
       obstacles = [];
       speed = 5.2;
       score = 0;
@@ -773,6 +773,15 @@ document.addEventListener('DOMContentLoaded', () => {
         dino.onGround = true;
       }
 
+      // Running-leg animation
+      if (dino.onGround) {
+        dino.frameTimer += speed;
+        if (dino.frameTimer > 36) {
+          dino.frameTimer = 0;
+          dino.frame = dino.frame === 0 ? 1 : 0;
+        }
+      }
+
       // Obstacles
       spawnTimer -= 1;
       if (spawnTimer <= 0) {
@@ -800,6 +809,47 @@ document.addEventListener('DOMContentLoaded', () => {
       scoreEl.textContent = Math.floor(score / 5);
     }
 
+    function drawDino(x, y, w, h, frame) {
+      ctx.fillStyle = '#39FF6A';
+      // tail
+      ctx.fillRect(x - w * 0.16, y + h * 0.24, w * 0.2, h * 0.16);
+      // body
+      ctx.fillRect(x, y + h * 0.16, w * 0.62, h * 0.5);
+      // neck/head
+      ctx.fillRect(x + w * 0.42, y, w * 0.5, h * 0.46);
+      // snout
+      ctx.fillRect(x + w * 0.84, y + h * 0.26, w * 0.18, h * 0.14);
+      // arm
+      ctx.fillRect(x + w * 0.4, y + h * 0.46, w * 0.12, h * 0.1);
+      // legs — alternate when running, both down when airborne
+      const legW = w * 0.16, legH = h * 0.34;
+      if (frame === null) {
+        ctx.fillRect(x + w * 0.12, y + h * 0.62, legW, legH * 0.85);
+        ctx.fillRect(x + w * 0.4, y + h * 0.62, legW, legH * 0.85);
+      } else if (frame === 0) {
+        ctx.fillRect(x + w * 0.12, y + h * 0.62, legW, legH);
+        ctx.fillRect(x + w * 0.4, y + h * 0.72, legW, legH * 0.7);
+      } else {
+        ctx.fillRect(x + w * 0.12, y + h * 0.72, legW, legH * 0.7);
+        ctx.fillRect(x + w * 0.4, y + h * 0.62, legW, legH);
+      }
+      // eye
+      ctx.fillStyle = '#0A0E0C';
+      ctx.fillRect(x + w * 0.74, y + h * 0.08, w * 0.08, h * 0.08);
+    }
+
+    function drawCactus(x, y, w, h) {
+      ctx.fillStyle = '#1FBF66';
+      const stemW = w * 0.4;
+      const stemX = x + (w - stemW) / 2;
+      ctx.fillRect(stemX, y, stemW, h);
+      // arms — only on taller cacti, gives variety
+      if (h > 32) {
+        ctx.fillRect(x, y + h * 0.22, w * 0.34, h * 0.16);
+        ctx.fillRect(x + w * 0.66, y + h * 0.42, w * 0.34, h * 0.16);
+      }
+    }
+
     function draw() {
       ctx.clearRect(0, 0, W, H);
 
@@ -812,14 +862,10 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.stroke();
 
       // Dino
-      ctx.fillStyle = '#39FF6A';
-      ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
-      ctx.fillStyle = '#0A0E0C';
-      ctx.fillRect(dino.x + dino.w - 10, dino.y + 6, 4, 4); // eye
+      drawDino(dino.x, dino.y, dino.w, dino.h, dino.onGround ? dino.frame : null);
 
       // Obstacles
-      ctx.fillStyle = '#1FBF66';
-      obstacles.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
+      obstacles.forEach(o => drawCactus(o.x, o.y, o.w, o.h));
 
       // Score (top-right, in-canvas)
       ctx.fillStyle = '#8FB89C';
