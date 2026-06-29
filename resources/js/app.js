@@ -709,7 +709,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const groundY = H - 30;
     const GRAVITY = 0.9;
     const JUMP_V  = -13.5;
+    const BASE_SPEED = 5.2;
+    const MAX_SPEED  = 13;
+    const SPEED_KEY = 'dinoRunSpeedMult';
 
+    let speedMult = parseFloat(localStorage.getItem(SPEED_KEY) || '1');
     let dino, obstacles, speed, score, best, running, rafId, spawnTimer;
 
     function loadBest() {
@@ -720,7 +724,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetState() {
       dino = { x: 50, y: groundY - 34, w: 30, h: 34, vy: 0, onGround: true, frame: 0, frameTimer: 0 };
       obstacles = [];
-      speed = 5.2;
+      speed = BASE_SPEED * speedMult;
       score = 0;
       spawnTimer = 0;
       running = false;
@@ -805,7 +809,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Score & difficulty ramp
       score += 1;
-      if (score % 90 === 0) speed = Math.min(speed + 0.4, 13);
+      if (score % 90 === 0) speed = Math.min(speed + 0.4 * speedMult, MAX_SPEED * speedMult);
       scoreEl.textContent = Math.floor(score / 5);
     }
 
@@ -891,6 +895,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     restartBtn?.addEventListener('click', start);
+
+    // Speed selector
+    document.querySelectorAll('.dino-speed-btn').forEach((btn) => {
+      if (parseFloat(btn.dataset.speed) === speedMult) btn.classList.add('on');
+      else btn.classList.remove('on');
+      btn.addEventListener('click', () => {
+        speedMult = parseFloat(btn.dataset.speed);
+        localStorage.setItem(SPEED_KEY, String(speedMult));
+        document.querySelectorAll('.dino-speed-btn').forEach((b) => b.classList.toggle('on', b === btn));
+        resetState();
+      });
+    });
 
     function panelVisible() {
       const panel = document.getElementById('pg-panel-dino');

@@ -59,6 +59,11 @@
           <span class="sprint-stat-label">Best</span>
         </div>
       </div>
+      <div class="dino-speed" role="group" aria-label="Game speed">
+        <button class="dino-speed-btn" data-speed="0.6">🐢 Slow</button>
+        <button class="dino-speed-btn on" data-speed="1">🦖 Normal</button>
+        <button class="dino-speed-btn" data-speed="1.5">⚡ Fast</button>
+      </div>
       <div class="dino-wrap">
         <canvas id="dino-canvas" width="640" height="200" aria-label="Dino Run game canvas"></canvas>
         <div class="dino-overlay" id="dino-overlay">
