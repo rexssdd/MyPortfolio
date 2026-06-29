@@ -1,3 +1,40 @@
+import Lenis from 'lenis';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ── Lenis smooth scroll ──
+   Replaces native scroll with an inertia-based scroller (the same
+   underlying approach awwwards-style sites use). Falls back to native
+   scroll for users who prefer reduced motion. */
+let lenis = null;
+if (!reduceMotion) {
+  lenis = new Lenis({
+    duration: 1.1,                 // higher = floatier
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    touchMultiplier: 1.5,
+  });
+
+  // Drive Lenis from the browser's own RAF loop
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  // Keep GSAP ScrollTrigger in sync with Lenis instead of native scroll
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  window.lenis = lenis; // exposed for debugging / future use
+}
+
 /* ── Toast ── */
 window.toast = function (msg, type = 'ok') {
   const el = document.getElementById('toast');
@@ -9,51 +46,6 @@ window.toast = function (msg, type = 'ok') {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-
-  /* ── Custom cursor: dot + lagging ring, magnetic on hover ── */
-  (function initCursor() {
-    const dot = document.getElementById('cur-dot');
-    const ring = document.getElementById('cur-ring');
-    if (!dot || !ring) return;
-    const isCoarse = window.matchMedia('(hover: none), (max-width: 900px)').matches;
-    if (isCoarse) return;
-
-    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
-    let rx = mx, ry = my;
-
-    window.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
-    });
-
-    function loop() {
-      rx += (mx - rx) * 0.18;
-      ry += (my - ry) * 0.18;
-      ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
-      requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
-
-    document.addEventListener('mousedown', () => ring.classList.add('click'));
-    document.addEventListener('mouseup', () => ring.classList.remove('click'));
-
-    const hoverables = 'a, button, .btn, .soc-btn, .hamburger, input, textarea, [role="button"]';
-    document.addEventListener('mouseover', e => {
-      if (e.target.closest(hoverables)) ring.classList.add('hover');
-    });
-    document.addEventListener('mouseout', e => {
-      if (e.target.closest(hoverables)) ring.classList.remove('hover');
-    });
-
-    document.addEventListener('mouseleave', () => {
-      dot.style.opacity = '0';
-      ring.style.opacity = '0';
-    });
-    document.addEventListener('mouseenter', () => {
-      dot.style.opacity = '1';
-      ring.style.opacity = '1';
-    });
-  })();
 
   /* ── Matrix rain background ── */
   (function initMatrixRain() {
@@ -108,10 +100,16 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── Smooth scroll for anchor links ── */
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', e => {
-      const target = document.querySelector(link.getAttribute('href'));
+      const targetSel = link.getAttribute('href');
+      if (!targetSel || targetSel === '#') return;
+      const target = document.querySelector(targetSel);
       if (!target) return;
       e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (lenis) {
+        lenis.scrollTo(target, { offset: -16, duration: 1.2 });
+      } else {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
   });
 
@@ -184,73 +182,113 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', updateProg, { passive: true });
 
   /* ── Enhanced Intersection reveal with multiple animation types ── */
-  const revealObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('vis');
-        revealObs.unobserve(e.target);
-      }
+  // All reveal elements — same .vis class contract your CSS already uses,
+  // now driven by ScrollTrigger for smoother, Lenis-synced timing.
+  document.querySelectorAll('[data-reveal], .rev, .rev-left, .rev-right, .rev-scale, .tl-item, .rev-stagger').forEach(el => {
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top bottom-=40px',
+      once: true,
+      onEnter: () => el.classList.add('vis'),
     });
-  }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
-
-  // All reveal elements
-  document.querySelectorAll('[data-reveal], .rev, .rev-left, .rev-right, .rev-scale, .tl-item').forEach(el => {
-    revealObs.observe(el);
   });
 
-  // Rev-stagger: observe parent, children animate via CSS
-  document.querySelectorAll('.rev-stagger').forEach(el => revealObs.observe(el));
-
-  /* ── Staggered card reveals ── */
-  const cardObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const cards = e.target.querySelectorAll('.sk-card, .proj-card, .cert-card, .lang-row');
-        cards.forEach((card, i) => {
-          setTimeout(() => card.classList.add('vis'), i * 60);
-        });
-        cardObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.05 });
-
-  // Temporarily make cards invisible for reveal
+  /* ── Staggered card reveals ──
+     One observer per grid (previously three overlapping ones fought over
+     the same cards). Cards animate via GSAP stagger instead of CSS
+     transition-delay hacks, which plays nicer with Lenis's inertia scroll. */
   document.querySelectorAll('.skills-grid, .proj-grid, .certs-grid, .lang-grid').forEach(grid => {
-    grid.querySelectorAll('.sk-card, .proj-card, .cert-card, .lang-row').forEach(card => {
-      card.style.opacity = '0';
-      card.style.transform = 'translateY(16px)';
-      card.style.transition = 'opacity .5s ease, transform .5s ease';
-      card.addEventListener('transitionend', () => {
-        card.style.opacity = '';
-        card.style.transform = '';
-        card.style.transition = '';
-      }, { once: true });
+    const cards = grid.querySelectorAll('.sk-card, .proj-card, .cert-card, .lang-row');
+    if (!cards.length) return;
+
+    gsap.set(cards, { opacity: 0, y: 16 });
+    ScrollTrigger.create({
+      trigger: grid,
+      start: 'top bottom-=20px',
+      once: true,
+      onEnter: () => {
+        gsap.to(cards, {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+          stagger: 0.055,
+        });
+      },
     });
-    // Override card .vis to set visible
-    grid.querySelectorAll('.sk-card, .proj-card, .cert-card, .lang-row').forEach(card => {
-      // Patch: add vis class handler
-      const origAddClass = card.classList.add.bind(card.classList);
-    });
-    cardObs.observe(grid);
   });
 
-  // Simple observer that adds visible class
-  const simpleCardObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const cards = e.target.querySelectorAll('.sk-card, .proj-card, .cert-card, .lang-row');
-        cards.forEach((card, i) => {
-          card.style.transitionDelay = (i * 55) + 'ms';
-          card.style.opacity = '1';
-          card.style.transform = 'none';
-        });
-        simpleCardObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.04 });
+  /* ── Profile detail reveals ──
+     Granular, item-by-item scroll animations for your actual profile
+     content — About paragraphs, trait tags, floating skill badges, and
+     hero stats — instead of those blocks just appearing all at once.
+     Purely additive: doesn't touch the matrix rain or aurora backgrounds. */
 
-  document.querySelectorAll('.skills-grid, .proj-grid, .certs-grid, .lang-grid').forEach(g => {
-    simpleCardObs.observe(g);
+  // About section: intro paragraphs reveal line by line
+  const aboutCol = document.querySelector('#about .sec-head');
+  if (aboutCol) {
+    const paras = aboutCol.querySelectorAll('p');
+    if (paras.length) {
+      gsap.set(paras, { opacity: 0, y: 14 });
+      ScrollTrigger.create({
+        trigger: aboutCol,
+        start: 'top bottom-=60px',
+        once: true,
+        onEnter: () => gsap.to(paras, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.12 }),
+      });
+    }
+  }
+
+  // About trait tags — pop in one after another
+  document.querySelectorAll('.about-tags').forEach(list => {
+    const tags = list.querySelectorAll('.tag');
+    if (!tags.length) return;
+    gsap.set(tags, { opacity: 0, y: 10, scale: 0.92 });
+    ScrollTrigger.create({
+      trigger: list,
+      start: 'top bottom-=30px',
+      once: true,
+      onEnter: () => gsap.to(tags, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'back.out(1.7)', stagger: 0.06 }),
+    });
+  });
+
+  // Floating skill badges on the About profile photo
+  document.querySelectorAll('.about-visual').forEach(visual => {
+    const badges = visual.querySelectorAll('.fl-badge');
+    if (!badges.length) return;
+    gsap.set(badges, { opacity: 0, y: 0, scale: 0.85 });
+    ScrollTrigger.create({
+      trigger: visual,
+      start: 'top bottom-=20px',
+      once: true,
+      onEnter: () => gsap.to(badges, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.6)', stagger: 0.18 }),
+    });
+  });
+
+  // Hero stats (Projects / Certs / Technologies / Curiosity) — each eases in separately
+  document.querySelectorAll('.hero-stats').forEach(dl => {
+    const stats = dl.querySelectorAll('.stat');
+    if (!stats.length) return;
+    gsap.set(stats, { opacity: 0, y: 16 });
+    ScrollTrigger.create({
+      trigger: dl,
+      start: 'top bottom-=30px',
+      once: true,
+      onEnter: () => gsap.to(stats, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', stagger: 0.1 }),
+    });
+  });
+
+  // Hero profile badges ("Open to Work", "Based in Philippines")
+  document.querySelectorAll('.hero-right').forEach(col => {
+    const badges = col.querySelectorAll('.profile-badge');
+    if (!badges.length) return;
+    gsap.set(badges, { opacity: 0, y: 12, scale: 0.95 });
+    ScrollTrigger.create({
+      trigger: col,
+      start: 'top bottom-=20px',
+      once: true,
+      onEnter: () => gsap.to(badges, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'power2.out', stagger: 0.12 }),
+    });
   });
 
   /* ── Skill bars ── */
@@ -434,7 +472,10 @@ document.getElementById('linkedin-btn')?.addEventListener('click', () => {
     window.addEventListener('scroll', () => {
       stBtn.classList.toggle('vis', window.scrollY > 500);
     }, { passive: true });
-    stBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    stBtn.addEventListener('click', () => {
+      if (lenis) lenis.scrollTo(0, { duration: 1.2 });
+      else window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }
 
   /* ── Flash toast from session ── */
@@ -470,5 +511,136 @@ document.getElementById('linkedin-btn')?.addEventListener('click', () => {
   }, { threshold: 0.5 });
   const heroStats = document.querySelector('.hero-stats');
   if (heroStats) statObs.observe(heroStats);
+
+  /* ── Code Sprint: typing speed game ──
+     A small showcase game: type the code snippet as fast/accurately as
+     possible. Tracks WPM, accuracy, time, and a localStorage best score.
+     Pure vanilla JS — no backend needed. */
+  (function initCodeSprint() {
+    const codeEl    = document.getElementById('sprint-code');
+    const inputEl   = document.getElementById('sprint-input');
+    const wpmEl     = document.getElementById('sprint-wpm');
+    const accEl     = document.getElementById('sprint-acc');
+    const timeEl    = document.getElementById('sprint-time');
+    const bestEl    = document.getElementById('sprint-best');
+    const msgEl     = document.getElementById('sprint-msg');
+    const restartBtn = document.getElementById('sprint-restart');
+    if (!codeEl || !inputEl) return;
+
+    const SNIPPETS = [
+      `function debounce(fn, wait) {\n  let t;\n  return (...args) => {\n    clearTimeout(t);\n    t = setTimeout(() => fn(...args), wait);\n  };\n}`,
+      `Route::middleware('auth')->group(function () {\n    Route::get('/dashboard', [DashboardController::class, 'index']);\n});`,
+      `public function index() {\n    return User::where('active', true)\n        ->orderBy('created_at', 'desc')\n        ->paginate(15);\n}`,
+      `const [data, setData] = useState(null);\nuseEffect(() => {\n  fetch('/api/profile').then(r => r.json()).then(setData);\n}, []);`,
+      `SELECT name, email FROM users\nWHERE role = 'admin'\nORDER BY created_at DESC\nLIMIT 10;`,
+      `try {\n    $hashed = Hash::make($password);\n} catch (Exception $e) {\n    Log::error($e->getMessage());\n}`,
+    ];
+
+    const STORAGE_KEY = 'codeSprintBestWpm';
+    let chars = [];
+    let startTime = null;
+    let timerInterval = null;
+    let finished = false;
+
+    function loadBest() {
+      const best = localStorage.getItem(STORAGE_KEY);
+      bestEl.textContent = best ? best : '—';
+    }
+
+    function pickSnippet() {
+      return SNIPPETS[Math.floor(Math.random() * SNIPPETS.length)];
+    }
+
+    function renderCode(target, typed) {
+      codeEl.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < target.length; i++) {
+        const span = document.createElement('span');
+        span.textContent = target[i];
+        if (i < typed.length) {
+          span.className = typed[i] === target[i] ? 'ch-correct' : 'ch-incorrect';
+        } else if (i === typed.length) {
+          span.className = 'ch-current';
+        }
+        frag.appendChild(span);
+      }
+      codeEl.appendChild(frag);
+    }
+
+    function reset() {
+      finished = false;
+      clearInterval(timerInterval);
+      startTime = null;
+      chars = pickSnippet().split('');
+      inputEl.value = '';
+      renderCode(chars.join(''), '');
+      wpmEl.textContent = '0';
+      accEl.textContent = '100%';
+      timeEl.textContent = '0.0s';
+      msgEl.textContent = 'Click the terminal and start typing to begin.';
+      msgEl.classList.remove('win');
+      loadBest();
+    }
+
+    function startTimerLoop() {
+      timerInterval = setInterval(() => {
+        if (!startTime) return;
+        const elapsed = (Date.now() - startTime) / 1000;
+        timeEl.textContent = elapsed.toFixed(1) + 's';
+      }, 100);
+    }
+
+    function finish(typed) {
+      finished = true;
+      clearInterval(timerInterval);
+      const elapsedSec = Math.max((Date.now() - startTime) / 1000, 0.1);
+      const target = chars.join('');
+      let correct = 0;
+      for (let i = 0; i < typed.length; i++) if (typed[i] === target[i]) correct++;
+      const accuracy = Math.round((correct / target.length) * 100);
+      const words = target.length / 5; // standard WPM word unit
+      const wpm = Math.round(words / (elapsedSec / 60));
+
+      wpmEl.textContent = wpm;
+      accEl.textContent = accuracy + '%';
+      timeEl.textContent = elapsedSec.toFixed(1) + 's';
+
+      const best = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+      if (wpm > best) {
+        localStorage.setItem(STORAGE_KEY, String(wpm));
+        bestEl.textContent = wpm;
+        msgEl.textContent = `🔥 New personal best — ${wpm} WPM at ${accuracy}% accuracy!`;
+      } else {
+        msgEl.textContent = `Done! ${wpm} WPM at ${accuracy}% accuracy. Try again for a new best?`;
+      }
+      msgEl.classList.add('win');
+      inputEl.blur();
+    }
+
+    codeEl.addEventListener('click', () => inputEl.focus());
+    codeEl.addEventListener('keydown', () => inputEl.focus());
+
+    inputEl.addEventListener('input', () => {
+      if (finished) { inputEl.value = ''; return; }
+      const typed = inputEl.value;
+      const target = chars.join('');
+
+      if (!startTime && typed.length > 0) {
+        startTime = Date.now();
+        startTimerLoop();
+        msgEl.textContent = 'Go! Keep typing…';
+      }
+
+      renderCode(target, typed);
+
+      if (typed.length >= target.length) {
+        finish(typed);
+      }
+    });
+
+    restartBtn?.addEventListener('click', reset);
+
+    reset();
+  })();
 
 });

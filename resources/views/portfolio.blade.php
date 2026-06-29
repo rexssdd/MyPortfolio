@@ -43,6 +43,10 @@
   @include('sections.github', ['langs' => $langs])
   <div class="divider" aria-hidden="true"></div>
 
+  {{-- ── PLAYGROUND (typing game) ── --}}
+  @include('sections.playground')
+  <div class="divider" aria-hidden="true"></div>
+
   {{-- ── CONTACT ── --}}
   @include('sections.contact')
 

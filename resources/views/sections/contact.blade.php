@@ -6,6 +6,37 @@
       <p class="sec-sub">Open to internships, collaborations, and interesting projects.</p>
     </div>
 
+    <div class="contact-info rev" data-reveal aria-label="Direct contact details">
+      <a href="https://www.linkedin.com/in/rexcel-jay-lusica-7a898436b" target="_blank" rel="noopener noreferrer" class="ci-card" id="linkedin-card">
+        <span class="ci-icon" aria-hidden="true">💼</span>
+        <span class="ci-text">
+          <span class="ci-label">LinkedIn</span>
+          <span class="ci-value">rexcel-jay-lusica</span>
+        </span>
+      </a>
+      <a href="https://github.com/rexssdd" target="_blank" rel="noopener noreferrer" class="ci-card">
+        <span class="ci-icon" aria-hidden="true">🐙</span>
+        <span class="ci-text">
+          <span class="ci-label">GitHub</span>
+          <span class="ci-value">rexssdd</span>
+        </span>
+      </a>
+      <a href="tel:+639067898243" class="ci-card">
+        <span class="ci-icon" aria-hidden="true">📞</span>
+        <span class="ci-text">
+          <span class="ci-label">Phone</span>
+          <span class="ci-value">0906 789 8243</span>
+        </span>
+      </a>
+      <a href="mailto:lusicarexceljay@gmail.com" class="ci-card">
+        <span class="ci-icon" aria-hidden="true">✉️</span>
+        <span class="ci-text">
+          <span class="ci-label">Email</span>
+          <span class="ci-value">lusicarexceljay@gmail.com</span>
+        </span>
+      </a>
+    </div>
+
     <div class="contact-card rev vis">
 
       <form id="contact-form" novalidate>
