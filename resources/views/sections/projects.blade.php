@@ -72,7 +72,17 @@
                      width="16" height="16"
                      style="vertical-align:middle;margin-right:6px;filter:invert(1);" alt="" />GitHub
               </a>
-              <button class="proj-link demo-btn" aria-label="{{ $project['title'] }} live demo (coming soon)">
+             @if (!empty($project['demo']))
+                <a
+                    href="{{ $project['demo'] }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="proj-link demo-btn"
+                    aria-label="{{ $project['title'] }} live demo"
+                >
+                    Live Demo
+                </a>
+            @endif
                 🚀 Demo
               </button>
             </div>

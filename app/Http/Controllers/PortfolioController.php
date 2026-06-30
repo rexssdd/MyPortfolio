@@ -115,7 +115,7 @@ class PortfolioController extends Controller
     private function projects(): array
     {
         return [
-            [
+                    [
                 'number'        => '01',
                 'title'         => 'High School Management System',
                 'desc'          => 'Comprehensive academic platform handling student records, grading, enrollment, and faculty management with multi-role access. Built with the DevDynamos team.',
@@ -124,6 +124,7 @@ class PortfolioController extends Controller
                 'image'         => asset('projectDesigns/highschool.png'),
                 'image_alt'     => 'High school classroom with students and a blackboard',
                 'github'        => 'https://github.com/jasper38/high-school-management-system',
+                'demo'          => 'https://mcpbahs-iota.vercel.app/',
                 'collab'        => true,
                 'collab_label'  => 'w/ jasper38 · DevDynamos',
             ],
