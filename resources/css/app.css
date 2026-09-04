@@ -249,14 +249,14 @@ body {
 /* ═══════════════════════════════════════════════════════
    NAVIGATION
 ═══════════════════════════════════════════════════════ */
-nav {
+#nav {
   position:fixed; top:0; left:0; right:0; z-index:700;
   padding:14px 40px;
   display:flex; align-items:center; justify-content:space-between;
   transition:all .3s;
   opacity:1; pointer-events:auto;
 }
-nav.ready { opacity:1; pointer-events:all; }
+#nav.ready { opacity:1; pointer-events:all; }
 .skip-link {
   position:fixed; top:8px; left:8px; z-index:900;
   transform:translateY(-150%);
@@ -266,7 +266,7 @@ nav.ready { opacity:1; pointer-events:all; }
   text-decoration:none; transition:transform .2s;
 }
 .skip-link:focus { transform:translateY(0); }
-nav.scrolled {
+#nav.scrolled {
   background:rgba(8,14,28,.9);
   backdrop-filter:blur(20px) saturate(180%);
   border-bottom:1px solid var(--b1);
