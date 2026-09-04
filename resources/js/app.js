@@ -52,18 +52,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('matrix-bg');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    const container = canvas.closest('#hero');
     const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ01';
     const fontSize = 16;
     let columns, drops;
 
     function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const bounds = container?.getBoundingClientRect();
+      canvas.width = Math.max(1, Math.floor(bounds?.width ?? window.innerWidth));
+      canvas.height = Math.max(1, Math.floor(bounds?.height ?? window.innerHeight));
       columns = Math.floor(canvas.width / fontSize);
       drops = Array.from({ length: columns }, () => Math.random() * -50);
     }
     resize();
     window.addEventListener('resize', resize, { passive: true });
+    if (container && 'ResizeObserver' in window) {
+      new ResizeObserver(resize).observe(container);
+    }
 
     function draw() {
       ctx.fillStyle = 'rgba(10,14,12,0.08)';

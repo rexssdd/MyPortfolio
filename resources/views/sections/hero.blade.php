@@ -1,4 +1,5 @@
 <section id="hero" aria-labelledby="hero-name">
+  <canvas id="matrix-bg" aria-hidden="true"></canvas>
   <div class="hero-left">
     <div class="hero-badge rev" data-reveal role="status">
       <span class="badge-blink" aria-hidden="true"></span>
