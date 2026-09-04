@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 $app = Application::configure(basePath: dirname(__DIR__));
 
 if (getenv('VERCEL')) {
-    $app->useStoragePath('/tmp/storage');
+    $_ENV['LARAVEL_STORAGE_PATH'] = '/tmp/storage';
+    $_SERVER['LARAVEL_STORAGE_PATH'] = '/tmp/storage';
 
     foreach (['app', 'app/public', 'framework', 'framework/cache', 'framework/cache/data', 'framework/sessions', 'framework/testing', 'framework/views', 'logs'] as $dir) {
         $path = '/tmp/storage/'.$dir;
