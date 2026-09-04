@@ -18,7 +18,7 @@
         <strong style="color:var(--t1)">Cybersecurity Fundamentals</strong> via Pearson/Certiport.
       </p>
       <ul class="about-tags" aria-label="Traits and interests">
-        @foreach(['🎯 Problem Solver','🔐 Cybersecurity','🗄️ Database Design','🎨 UI/UX Aware','📐 Clean Code','🚀 MVC Architecture'] as $tag)
+        @foreach(['Problem Solver','Cybersecurity','Database Design','UI/UX Aware','Clean Code','MVC Architecture'] as $tag)
           <li class="tag">{{ $tag }}</li>
         @endforeach
       </ul>

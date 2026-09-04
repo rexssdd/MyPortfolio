@@ -639,7 +639,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (wpm > best) {
         localStorage.setItem(STORAGE_KEY, String(wpm));
         bestEl.textContent = wpm;
-        msgEl.textContent = `🔥 New personal best — ${wpm} WPM at ${accuracy}% accuracy!`;
+        msgEl.textContent = `New personal best — ${wpm} WPM at ${accuracy}% accuracy!`;
       } else {
         msgEl.textContent = `Done! ${wpm} WPM at ${accuracy}% accuracy. Try again for a new best?`;
       }

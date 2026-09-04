@@ -17,9 +17,9 @@
       and cybersecurity.
     </p>
     <div class="hero-btns rev" data-reveal role="group" aria-label="Quick actions" style="transition-delay:.3s">
-      <a href="#projects" class="btn btn-p">⚡ View Projects</a>
-      <a href="#contact"  class="btn btn-g">📩 Contact Me</a>
-      <a href="{{ asset('Resume/Rexcel_Jay_Lusica_Resume.pdf') }}" target="_blank" rel="noopener noreferrer" class="btn btn-o" id="resume-btn" aria-label="View resume (opens in new tab)">↓ View Resume</a>
+      <a href="#projects" class="btn btn-p">View Projects</a>
+      <a href="#contact"  class="btn btn-g">Contact Me</a>
+      <a href="{{ asset('Resume/Rexcel_Jay_Lusica_Resume.pdf') }}" target="_blank" rel="noopener noreferrer" class="btn btn-o" id="resume-btn" aria-label="View resume (opens in new tab)">View Resume</a>
     </div>
     <dl class="hero-stats rev" data-reveal aria-label="Key statistics" style="transition-delay:.38s">
       @foreach([['7','Projects'],['2','Certs'],['5+','Technologies'],['∞','Curiosity']] as [$num, $label])

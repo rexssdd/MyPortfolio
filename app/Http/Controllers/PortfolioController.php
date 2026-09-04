@@ -304,7 +304,7 @@ class PortfolioController extends Controller
             ['key' => 'java',   'label' => 'Java'],
             ['key' => 'python', 'label' => 'Python'],
             ['key' => 'mysql',  'label' => 'MySQL'],
-            ['key' => 'collab', 'label' => '🤝 Collab'],
+            ['key' => 'collab', 'label' => 'Collab'],
         ];
     }
 }
