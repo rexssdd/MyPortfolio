@@ -67,6 +67,7 @@ html { scroll-behavior: smooth; overflow-x: hidden; }
 }
 
 /* ── Base ──────────────────────────────────────────────── */
+section[id] { scroll-margin-top:80px; }
 body {
   background: var(--ink);
   color: var(--t1);
@@ -256,6 +257,15 @@ nav {
   opacity:0; pointer-events:none;
 }
 nav.ready { opacity:1; pointer-events:all; }
+.skip-link {
+  position:fixed; top:8px; left:8px; z-index:900;
+  transform:translateY(-150%);
+  padding:8px 14px; border-radius:var(--r-sm);
+  background:var(--surf); color:var(--t1);
+  font-family:var(--font-display); font-size:12px;
+  text-decoration:none; transition:transform .2s;
+}
+.skip-link:focus { transform:translateY(0); }
 nav.scrolled {
   background:rgba(8,14,28,.9);
   backdrop-filter:blur(20px) saturate(180%);
