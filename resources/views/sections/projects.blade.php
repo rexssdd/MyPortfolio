@@ -42,7 +42,7 @@
               {{-- Collab badge floated over image --}}
               @if($isCollab)
                 <div class="proj-collab-badge proj-collab-badge--img" aria-label="Collaborative project">
-                  🤝 {{ $project['collab_label'] }}
+                  {{ $project['collab_label'] }}
                 </div>
               @endif
             </div>
@@ -50,7 +50,7 @@
             {{-- Fallback: no image —show old inline badge --}}
             @if($isCollab)
               <div class="proj-collab-badge" aria-label="Collaborative project">
-                🤝 {{ $project['collab_label'] }}
+                {{ $project['collab_label'] }}
               </div>
             @endif
             <div class="proj-num">Project {{ $project['number'] }}</div>

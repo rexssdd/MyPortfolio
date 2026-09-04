@@ -772,7 +772,7 @@ document.addEventListener('DOMContentLoaded', () => {
         best = score;
         localStorage.setItem(BEST_KEY, String(best));
         bestEl.textContent = best;
-        overlayText.innerHTML = `🦖 New best — ${score}! Tap or press Space to retry.`;
+        overlayText.innerHTML = `New best — ${score}! Tap or press Space to retry.`;
       } else {
         overlayText.innerHTML = `Game over — score ${score}. Tap or press Space to retry.`;
       }
