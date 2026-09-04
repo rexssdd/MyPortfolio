@@ -109,6 +109,7 @@ class PortfolioController extends Controller
             ['name' => 'Git & GitHub',   'icon' => 'git/git-original.svg',                        'level' => 78, 'category' => 'other', 'color' => '#F1502F'],
             ['name' => 'UI/UX Design',   'icon' => 'figma/figma-original.svg',                    'level' => 72, 'category' => 'other', 'color' => '#EC4899'],
             ['name' => 'System Analysis','icon' => 'vscode/vscode-original.svg',                  'level' => 75, 'category' => 'other', 'color' => '#F59E0B'],
+            ['name' => 'Google Apps Script', 'icon' => 'google/google-original.svg',               'level' => 70, 'category' => 'other', 'color' => '#4285F4'],
         ];
     }
 
