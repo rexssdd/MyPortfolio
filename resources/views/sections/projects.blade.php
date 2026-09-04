@@ -3,7 +3,7 @@
     <div class="sec-head rev" data-reveal>
       <div class="sec-tag">// built by me</div>
       <h2 class="sec-title" id="proj-title">Featured <span class="g">Projects</span></h2>
-      <p class="sec-sub">Systems and applications engineered from concept to deployment.</p>
+      <p class="sec-sub">Systems and applications engineered from idea to working code.</p>
     </div>
 
     {{-- Filter buttons (JS-driven) --}}
@@ -70,21 +70,8 @@
                  class="proj-link" aria-label="{{ $project['title'] }} GitHub repository">
                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
                      width="16" height="16"
-                     style="vertical-align:middle;margin-right:6px;filter:invert(1);" alt="" />GitHub
+                     style="vertical-align:middle;margin-right:6px;filter:invert(1);" alt="" />Source Code
               </a>
-             @if (!empty($project['demo']))
-                <a
-                    href="{{ $project['demo'] }}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="proj-link demo-btn"
-                    aria-label="{{ $project['title'] }} live demo"
-                >
-                    Live Demo
-                </a>
-            @endif
-                🚀 Demo
-              </button>
             </div>
           </div>
 

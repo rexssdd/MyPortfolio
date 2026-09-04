@@ -124,7 +124,6 @@ class PortfolioController extends Controller
                 'image'         => asset('projectDesigns/highschool.png'),
                 'image_alt'     => 'High school classroom with students and a blackboard',
                 'github'        => 'https://github.com/jasper38/high-school-management-system',
-                'demo'          => 'https://mcpbahs-iota.vercel.app/',
                 'collab'        => true,
                 'collab_label'  => 'w/ jasper38 · DevDynamos',
             ],
