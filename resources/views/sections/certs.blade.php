@@ -68,6 +68,60 @@
         </div>
     </article>
 
+    <!-- GENDER SENSITIVITY -->
+    <article class="cert-card rev" data-reveal>
+      <div class="cert-showcase">
+        <img loading="lazy" decoding="async" src="{{ asset('images/GenderSensitivity.jpg') }}"
+           alt="Gender Sensitivity Certificate"
+           class="cert-image">
+      </div>
+
+      <div class="cert-body">
+        <div class="cert-org">Professional Development</div>
+        <h3 class="cert-title">Gender Sensitivity</h3>
+        <p class="cert-desc">
+          Completed training focused on awareness, respectful communication,
+          inclusion, and gender-responsive professional practice.
+        </p>
+      </div>
+    </article>
+
+    <!-- MENTAL HYGIENE -->
+    <article class="cert-card rev" data-reveal>
+      <div class="cert-showcase">
+        <img loading="lazy" decoding="async" src="{{ asset('images/Mental Hygiene.jpg') }}"
+           alt="Mental Hygiene Certificate"
+           class="cert-image">
+      </div>
+
+      <div class="cert-body">
+        <div class="cert-org">Professional Development</div>
+        <h3 class="cert-title">Mental Hygiene</h3>
+        <p class="cert-desc">
+          Completed training on mental health awareness, personal wellbeing,
+          healthy coping strategies, and supportive workplace practices.
+        </p>
+      </div>
+    </article>
+
+    <!-- OFFICE ETIQUETTE -->
+    <article class="cert-card rev" data-reveal>
+      <div class="cert-showcase">
+        <img loading="lazy" decoding="async" src="{{ asset('images/Office Etiquette And Work Ethics.jpg') }}"
+           alt="Office Etiquette and Work Ethics Certificate"
+           class="cert-image">
+      </div>
+
+      <div class="cert-body">
+        <div class="cert-org">Professional Development</div>
+        <h3 class="cert-title">Office Etiquette and Work Ethics</h3>
+        <p class="cert-desc">
+          Completed training on workplace etiquette, professional conduct,
+          collaboration, accountability, and ethical work habits.
+        </p>
+      </div>
+    </article>
+
 
     </div>
 
