@@ -3,7 +3,6 @@ storage/framework/cache/**
 storage/framework/sessions/**
 storage/framework/views/**
 storage/logs/**
-public/build/**
 .env*
 node_modules/**
 vendor/**

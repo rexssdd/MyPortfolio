@@ -7,6 +7,10 @@
   ],
   "routes": [
     { "src": "/build/(.*)", "dest": "/public/build/$1" },
+    { "src": "/images/(.*)", "dest": "/public/images/$1" },
+    { "src": "/cert/(.*)", "dest": "/public/cert/$1" },
+    { "src": "/projectDesigns/(.*)", "dest": "/public/projectDesigns/$1" },
+    { "src": "/Resume/(.*)", "dest": "/public/Resume/$1" },
     { "src": "/phpversion.php", "dest": "/public/phpversion.php" },
     { "src": "/(.*)", "dest": "/public/index.php" }
   ]
