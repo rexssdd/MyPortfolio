@@ -70,6 +70,7 @@
                 style="width:100%;justify-content:center;font-size:13px;">
           <span id="contact-btn-text">Send Message →</span>
         </button>
+      </form>
     </div>
   </div>
 </section>

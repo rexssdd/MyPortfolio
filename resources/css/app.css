@@ -254,7 +254,7 @@ nav {
   padding:14px 40px;
   display:flex; align-items:center; justify-content:space-between;
   transition:all .3s;
-  opacity:0; pointer-events:none;
+  opacity:1; pointer-events:auto;
 }
 nav.ready { opacity:1; pointer-events:all; }
 .skip-link {
@@ -1121,6 +1121,64 @@ section {
    HCI: Clear label positioning, inline validation feedback,
         sufficient tap targets on all inputs
 ═══════════════════════════════════════════════════════ */
+.contact-info {
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:12px;
+  max-width:960px;
+  margin:0 auto 28px;
+}
+.ci-card {
+  min-width:0;
+  min-height:92px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:16px;
+  background:var(--g1);
+  border:1px solid var(--b1);
+  border-radius:var(--r-md);
+  color:var(--t1);
+  text-decoration:none;
+  transition:transform .2s, border-color .2s, background .2s;
+}
+.ci-card:hover {
+  transform:translateY(-2px);
+  border-color:var(--b3);
+  background:var(--g2);
+}
+.ci-icon {
+  flex:0 0 38px;
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:var(--r-sm);
+  background:rgba(37,99,235,.12);
+  font-size:18px;
+}
+.ci-text {
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.ci-label {
+  color:var(--t3);
+  font-family:var(--font-mono);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+.ci-value {
+  overflow:hidden;
+  color:var(--t1);
+  font-family:var(--font-display);
+  font-size:12px;
+  font-weight:600;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
 .contact-card {
   background:var(--g1); border:1px solid var(--b1);
   border-radius:var(--r-xl); padding:36px;
@@ -1234,10 +1292,12 @@ footer {
   .gh-stats { justify-content:center; }
   .certs-grid { grid-template-columns:1fr; }
   .cert-card { flex-direction:column; }
+  .contact-info { grid-template-columns:repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 480px) {
   .hero-btns { flex-direction:column; align-items:center; }
   .btn { width:100%; justify-content:center; }
   .skills-grid { grid-template-columns:1fr 1fr; }
+  .contact-info { grid-template-columns:1fr; }
 }

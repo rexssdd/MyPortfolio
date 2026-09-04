@@ -693,6 +693,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     tabSprint.addEventListener('click', () => show('sprint'));
     tabDino.addEventListener('click', () => show('dino'));
+    [tabSprint, tabDino].forEach((tab) => {
+      tab.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        const next = event.key === 'ArrowRight' ? tabDino : tabSprint;
+        show(next === tabSprint ? 'sprint' : 'dino');
+        next.tabIndex = 0;
+        tabSprint.tabIndex = next === tabSprint ? 0 : -1;
+        tabDino.tabIndex = next === tabDino ? 0 : -1;
+        next.focus();
+      });
+    });
   })();
 
   /* ── Dino Run: Chrome-dino-style canvas runner ──

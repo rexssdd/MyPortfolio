@@ -7,11 +7,11 @@
     </div>
 
     <div class="pg-tabs rev vis" role="tablist" aria-label="Playground games">
-      <button class="pg-tab on" id="pg-tab-sprint" role="tab" aria-selected="true" aria-controls="pg-panel-sprint">⌨️ Code Sprint</button>
-      <button class="pg-tab" id="pg-tab-dino" role="tab" aria-selected="false" aria-controls="pg-panel-dino">🦖 Dino Run</button>
+      <button class="pg-tab on" id="pg-tab-sprint" type="button" role="tab" tabindex="0" aria-selected="true" aria-controls="pg-panel-sprint">⌨️ Code Sprint</button>
+      <button class="pg-tab" id="pg-tab-dino" type="button" role="tab" tabindex="-1" aria-selected="false" aria-controls="pg-panel-dino">🦖 Dino Run</button>
     </div>
 
-    <div class="sprint-card rev vis" id="pg-panel-sprint" role="tabpanel" aria-label="Typing speed game">
+    <div class="sprint-card rev vis" id="pg-panel-sprint" role="tabpanel" tabindex="0" aria-labelledby="pg-tab-sprint" aria-label="Typing speed game">
       <div class="sprint-stats" role="status" aria-live="polite">
         <div class="sprint-stat">
           <span class="sprint-stat-num" id="sprint-wpm">0</span>
@@ -48,7 +48,7 @@
       </div>
     </div>
 
-    <div class="dino-card rev" id="pg-panel-dino" role="tabpanel" aria-label="Dino Run game" hidden>
+    <div class="dino-card rev" id="pg-panel-dino" role="tabpanel" tabindex="0" aria-labelledby="pg-tab-dino" aria-label="Dino Run game" hidden>
       <div class="dino-stats" role="status" aria-live="polite">
         <div class="sprint-stat">
           <span class="sprint-stat-num" id="dino-score">0</span>
