@@ -62,6 +62,7 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "vercel": [
+            "@php artisan package:discover --ansi",
             "npm run build"
         ],
         "post-create-project-cmd": [
